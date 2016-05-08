@@ -1,6 +1,7 @@
 package LGG;
 
 import sim.display.*;
+import sim.portrayal.continuous.ContinuousPortrayal2D;
 import sim.portrayal.grid.*;
 
 import java.awt.*;
@@ -15,7 +16,9 @@ import sim.engine.SimState;
 public class LGGWithUi extends GUIState {
 	public Display2D display;
 	public JFrame displayFrame;
-	SparseGridPortrayal2D cellPortrayal = new SparseGridPortrayal2D();
+	//SparseGridPortrayal2D cellPortrayal = new SparseGridPortrayal2D();
+	//SparseGridPortrayal2D nutrientsPortrayal = new SparseGridPortrayal2D();
+	ContinuousPortrayal2D portrayal = new ContinuousPortrayal2D();
 
 	
 	public static void main(String[] args){
@@ -48,21 +51,34 @@ public class LGGWithUi extends GUIState {
 
 	private void setupPortrayals() {
 		Environment se = (Environment)state;
-		cellPortrayal.setField(se.particleSpace);
-		OvalPortrayal2D o = new OvalPortrayal2D(Color.red);
-		cellPortrayal.setPortrayalForAll(o);
+		portrayal.setField(se.environtment);
+		portrayal.setPortrayalForClass(Cell.class, new OvalPortrayal2D(Color.red));
+		portrayal.setPortrayalForClass(Oxygen.class, new OvalPortrayal2D(Color.blue, 2.0));
+
+		//cellPortrayal.setField(se.environtment);
+		
+		//OvalPortrayal2D o = new OvalPortrayal2D(Color.red);
+		//cellPortrayal.setPortrayalForAll(o);
+		
+		
+		//nutrientsPortrayal.setField(se.environtment);
+		//OvalPortrayal2D p = new OvalPortrayal2D(Color.blue);
+		//nutrientsPortrayal.setPortrayalForAll(p);
+		
 		display.reset();
 		display.repaint();
 	}
 
 	public void init(Controller c){
 		super.init(c);
-		display = new Display2D(400,400,this);
+		display = new Display2D(1000,1000,this);
 		displayFrame = display.createFrame();
 		c.registerFrame(displayFrame);
 		displayFrame.setVisible(true);
 		display.setBackdrop(Color.black);
-		display.attach(cellPortrayal,"Cells");
+		display.attach(portrayal,"Cells");
+		//display.attach(nutrientsPortrayal, "o");
+		
 	}
 
 

@@ -1,5 +1,7 @@
 package LGG;
 
-public interface Molecule {
+import sim.engine.Steppable;
+
+public abstract class Molecule implements Steppable{
 
 }

@@ -4,54 +4,64 @@ import java.util.Random;
 
 import sim.engine.SimState;
 import sim.engine.Steppable;
+import sim.util.Double2D;
 
 public class Cell implements Steppable{
-	public int y;
-	public int x;
+	int x; 
+	int y;
+	public Double2D position;
 
-	public Cell(Environment environment) {
+	public Cell(Environment environment) { 
 		Random rand = new Random();
-		x = (int)(rand.nextDouble() * 50 + 1);
-		y = (int)(rand.nextDouble() * 50 + 1);
-		
+		double x = (rand.nextDouble() * environment.gridWidth + 1);
+		double y = (rand.nextDouble() * environment.gridHeight + 1);
+		position = new Double2D(x, y);
 		System.out.println("x: "+x+" y: "+y);
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Cell(int x, int y) {
-		this.x = x;
-		this.y = y;
-		System.out.println("new cell at x: "+x+" y: "+y);
+	public Cell(Double2D p) {
+		this.position = p;
+		//System.out.println("new cell at x: "+x+" y: "+y);
 		// TODO Auto-generated constructor stub
 	}
 
 	public void step(SimState state) {
-		// TODO Auto-generated method stub
 		Environment t = (Environment)state;
+
 		Expand(t);
 		Move(t);
 	}
 
 	private void Expand(Environment state){
-		boolean copyPosX = state.random.nextBoolean();
-		boolean copyPosY = state.random.nextBoolean();
-		boolean copyNegY = state.random.nextBoolean();
-		int copyX = x;
-		int copyY = y;
-		if (copyPosX){
-			copyX = x + 1;
-		}else if (copyPosY){
-			copyY = y + 1;
-		}else if (copyNegY){
+	boolean copyPos = state.random.nextBoolean();;
+		//boolean copyPosX = state.random.nextBoolean();
+		//boolean copyPosY = state.random.nextBoolean();
+		//boolean copyNegY = state.random.nextBoolean();
+		Double2D copy = new Double2D(x,y);
+		
+		Double2D other = new Double2D(1,1);
+		
+		if (copyPos){
+			copy = this.position.add(other);
+		}else if (copyPos){
+			copy = this.position.subtract(other);
+		}
+		/*}else if (copyNegY){
 			copyY = y - 1;
 		}else{
 			copyX = x - 1;
-		}
-		boolean canCopy = CheckCell(copyX, copyY, state);
+		}*/
+			
+			
+			
+		boolean canCopy = CheckCell(copy, state);
 		if (canCopy){
-			Cell copyCell = new Cell(copyX, copyY);
+			Cell copyCell = new Cell(copy);
+			
 			state.cells.add(copyCell);
-			state.particleSpace.setObjectLocation(copyCell, copyCell.x, copyCell.y);
+			Double2D d = new Double2D(copyCell.x, copyCell.y);
+			state.environtment.setObjectLocation(copyCell, d);
 			state.schedule.scheduleRepeating(copyCell);		
 			System.out.println("STEP: copy to x: "+x+" y: "+y);
 		}else{
@@ -60,36 +70,38 @@ public class Cell implements Steppable{
 	}
 
 	private void Move(Environment state){
-		boolean movePosX = state.random.nextBoolean();
-		boolean movePosY = state.random.nextBoolean();
-		boolean moveNegY = state.random.nextBoolean();
-		int newX = x;
-		int newY = y;
-		if (movePosX){
-			newX = x + 1;
-		}else if (movePosY){
-			newY = y + 1;
-		}else if (moveNegY){
-			newY = y - 1;
-		}else{
-			newX = x - 1;
-		}
 		
-		boolean move = CheckCell(newX, newY, state);
+		boolean movePos = state.random.nextBoolean();
+		//boolean movePosY = state.random.nextBoolean();
+		boolean moveNeg = state.random.nextBoolean();
+		//int newX = x;
+		//int newY = y;
+		Double2D movePosition = new Double2D(x,y);
+		
+		Double2D other = new Double2D(1,1);
+		
+		if (movePos){
+			movePosition = this.position.add(other);
+		}else if (moveNeg){
+			movePosition = this.position.subtract(other);
+		}
+
+		
+		boolean move = CheckCell(movePosition, state);
 
 		if (move){
-			x = newX;
-			y = newY;
 			System.out.println("STEP: x: "+x+" y: "+y);
-			state.particleSpace.setObjectLocation(this, x, y);			
+			Double2D d = new Double2D(x, y);
+			state.environtment.setObjectLocation(this, d);		
 		}else{
 			System.out.println("STEP: NOT MOVE");			
 		}
 	}
 	
-	private boolean CheckCell(int x, int y, Environment state){
+	private boolean CheckCell(Double2D d, Environment state){
 		for (Cell cell : state.cells){
-			if (cell.x == x && cell.y == y){
+			state.environtment.getNeighborsExactlyWithinDistance(cell.position, d.distance(position));
+			if (cell.position == d){
 				return false;
 			}
 		}
