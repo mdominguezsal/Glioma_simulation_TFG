@@ -52,7 +52,7 @@ public class LGGWithUi extends GUIState {
 	private void setupPortrayals() {
 		Environment se = (Environment)state;
 		portrayal.setField(se.environtment);
-		portrayal.setPortrayalForClass(Cell.class, new OvalPortrayal2D(Color.red));
+		portrayal.setPortrayalForClass(Cell.class, new OvalPortrayal2D(Color.green));
 		portrayal.setPortrayalForClass(Oxygen.class, new OvalPortrayal2D(Color.blue, 2.0));
 
 		//cellPortrayal.setField(se.environtment);

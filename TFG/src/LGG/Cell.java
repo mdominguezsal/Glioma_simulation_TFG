@@ -1,44 +1,40 @@
 package LGG;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import sim.engine.SimState;
 import sim.engine.Steppable;
+import sim.util.Bag;
 import sim.util.Double2D;
 
 public class Cell implements Steppable{
-	int x; 
-	int y;
 	public Double2D position;
-
+	public CellState cellState;
+	
 	public Cell(Environment environment) { 
-		Random rand = new Random();
-		double x = (rand.nextDouble() * environment.gridWidth + 1);
-		double y = (rand.nextDouble() * environment.gridHeight + 1);
-		position = new Double2D(x, y);
-		System.out.println("x: "+x+" y: "+y);
-		// TODO Auto-generated constructor stub
+		position = new Double2D((environment.random.nextDouble() * environment.gridWidth + 1), (environment.random.nextDouble() * environment.gridHeight + 1));
+		//System.out.println("x: "+position.x+" y: "+position.y);
+		cellState = new NormalCellState();
 	}
 	
 	public Cell(Double2D p) {
 		this.position = p;
-		//System.out.println("new cell at x: "+x+" y: "+y);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void step(SimState state) {
-		Environment t = (Environment)state;
-
-		Expand(t);
-		Move(t);
+		cellState.executeState(state, this);
+		//Environment t = (Environment)state;
+		//Expand(t);
+		//Move(t);
 	}
 
 	private void Expand(Environment state){
-	boolean copyPos = state.random.nextBoolean();;
+		boolean copyPos = state.random.nextBoolean();
 		//boolean copyPosX = state.random.nextBoolean();
 		//boolean copyPosY = state.random.nextBoolean();
 		//boolean copyNegY = state.random.nextBoolean();
-		Double2D copy = new Double2D(x,y);
+		Double2D copy = new Double2D(position.x, position.y);
 		
 		Double2D other = new Double2D(1,1);
 		
@@ -52,18 +48,15 @@ public class Cell implements Steppable{
 		}else{
 			copyX = x - 1;
 		}*/
-			
-			
-			
+	
 		boolean canCopy = CheckCell(copy, state);
 		if (canCopy){
 			Cell copyCell = new Cell(copy);
 			
 			state.cells.add(copyCell);
-			Double2D d = new Double2D(copyCell.x, copyCell.y);
-			state.environtment.setObjectLocation(copyCell, d);
+			state.environtment.setObjectLocation(copyCell, copyCell.position);
 			state.schedule.scheduleRepeating(copyCell);		
-			System.out.println("STEP: copy to x: "+x+" y: "+y);
+			System.out.println("STEP: copy to x: "+copyCell.position.x+" y: "+copyCell.position.y);
 		}else{
 			System.out.println("STEP: NOT COPY");
 		}
@@ -76,7 +69,7 @@ public class Cell implements Steppable{
 		boolean moveNeg = state.random.nextBoolean();
 		//int newX = x;
 		//int newY = y;
-		Double2D movePosition = new Double2D(x,y);
+		Double2D movePosition = new Double2D(position.x, position.y);
 		
 		Double2D other = new Double2D(1,1);
 		
@@ -85,25 +78,26 @@ public class Cell implements Steppable{
 		}else if (moveNeg){
 			movePosition = this.position.subtract(other);
 		}
-
-		
 		boolean move = CheckCell(movePosition, state);
 
 		if (move){
-			System.out.println("STEP: x: "+x+" y: "+y);
-			Double2D d = new Double2D(x, y);
-			state.environtment.setObjectLocation(this, d);		
+			System.out.println("STEP: x: "+movePosition.x+" y: "+movePosition.y);
+			position = movePosition;
+			state.environtment.setObjectLocation(this, position);		
 		}else{
 			System.out.println("STEP: NOT MOVE");			
 		}
 	}
-	
+
 	private boolean CheckCell(Double2D d, Environment state){
-		for (Cell cell : state.cells){
-			state.environtment.getNeighborsExactlyWithinDistance(cell.position, d.distance(position));
-			if (cell.position == d){
-				return false;
-			}
+		Bag b = state.environtment.getNeighborsExactlyWithinDistance(this.position, d.distance(position));
+		Iterator i = b.iterator();
+		
+		while(i.hasNext()){
+			i.next();
+		}
+		if (this.position == d){
+			return false;
 		}
 		return true;
 	}

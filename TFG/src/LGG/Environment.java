@@ -45,13 +45,11 @@ public class Environment extends SimState {
 
 		 for(int i=0;i < n;i++){
 			 Cell cell = new Cell(this);
-			 Double2D d = new Double2D(cell.x,cell.y); 
-			 environtment.setObjectLocation(cell, d);
+			 environtment.setObjectLocation(cell, cell.position);
 			 schedule.scheduleRepeating(cell);
 			 
 			 Oxygen oxygen = new Oxygen(this);
-			 Double2D v = new Double2D(oxygen.x,oxygen.y); 
-			 environtment.setObjectLocation(oxygen, v);
+			 environtment.setObjectLocation(oxygen, oxygen.position);
 			 schedule.scheduleRepeating(oxygen);
 			 
 			 
