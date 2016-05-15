@@ -9,13 +9,20 @@ import sim.util.Bag;
 import sim.util.Double2D;
 
 public class Cell implements Steppable{
-	public Double2D position;
-	public CellState cellState;
+	private Double2D position;
+	private CellState cellState;
 	
-	public Cell(Environment environment) { 
-		position = new Double2D((environment.random.nextDouble() * environment.gridWidth), (environment.random.nextDouble() * environment.gridHeight));
+	public Cell(Environment state) { 
+		position = new Double2D((state.random.nextDouble() * (state.getGridWidth()/3)), (state.random.nextDouble() * (state.getGridHeigh()/2)));
 		//System.out.println("x: "+position.x+" y: "+position.y);
-		cellState = new NormalCellState();
+
+		Double randomTumourCell = state.random.nextDouble()* 25;
+		int i = randomTumourCell.intValue();
+		if( i == 1 || i == 2) {
+			cellState = new NormtoxicCellState();
+		}else{
+			cellState = new NormalCellState();
+		}
 	}
 	
 	public Cell(Double2D p) {
@@ -29,7 +36,7 @@ public class Cell implements Steppable{
 		//Move(t);
 	}
 
-	private void Expand(Environment state){
+	public void Expand(Environment state){
 		boolean copyPos = state.random.nextBoolean();
 		//boolean copyPosX = state.random.nextBoolean();
 		//boolean copyPosY = state.random.nextBoolean();
@@ -53,7 +60,7 @@ public class Cell implements Steppable{
 		if (canCopy){
 			Cell copyCell = new Cell(copy);
 			
-			state.cells.add(copyCell);
+			//state.cells.add(copyCell);
 			state.environtment.setObjectLocation(copyCell, copyCell.position);
 			state.schedule.scheduleRepeating(copyCell);		
 			System.out.println("STEP: copy to x: "+copyCell.position.x+" y: "+copyCell.position.y);
@@ -62,8 +69,7 @@ public class Cell implements Steppable{
 		}
 	}
 
-	private void Move(Environment state){
-		
+	public void Move(Environment state){		
 		boolean movePos = state.random.nextBoolean();
 		//boolean movePosY = state.random.nextBoolean();
 		boolean moveNeg = state.random.nextBoolean();
@@ -101,4 +107,22 @@ public class Cell implements Steppable{
 		}
 		return true;
 	}
+
+	
+	public Double2D getPosition(){
+		return this.position;
+	}
+	
+	public void setPosition(Double2D p){
+		this.position = p;
+	}
+	
+	public CellState getCellState(){
+		return this.cellState;
+	}
+	
+	public void setCellState(CellState c){
+		this.cellState = c;
+	}
 }
+

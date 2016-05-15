@@ -1,6 +1,7 @@
 package LGG;
 
 import sim.display.*;
+import sim.portrayal.DrawInfo2D;
 import sim.portrayal.continuous.ContinuousPortrayal2D;
 import sim.portrayal.grid.*;
 
@@ -52,7 +53,15 @@ public class LGGWithUi extends GUIState {
 	private void setupPortrayals() {
 		Environment se = (Environment)state;
 		portrayal.setField(se.environtment);
-		portrayal.setPortrayalForClass(Cell.class, new OvalPortrayal2D(Color.green,3));
+		OvalPortrayal2D cellPortrayal = new OvalPortrayal2D(){
+		    public void draw(Object object, Graphics2D graphics, DrawInfo2D info){
+		    	Cell cell = (Cell)object;
+		    	paint = cell.getCellState().getColor();
+		    	scale = 5;
+				super.draw(object, graphics, info);
+			}
+		};
+		portrayal.setPortrayalForClass(Cell.class, cellPortrayal);
 		portrayal.setPortrayalForClass(Oxygen.class, new OvalPortrayal2D(Color.blue));
 		portrayal.setPortrayalForClass(Glucose.class, new OvalPortrayal2D(Color.cyan));
 

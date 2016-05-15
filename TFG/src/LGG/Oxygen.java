@@ -7,8 +7,8 @@ public class Oxygen extends Molecule{
 	private static final long serialVersionUID = 1L;
 	Environment e;
 	
-	public Oxygen(Environment environment) {
-		position = new Double2D((environment.random.nextDouble() * environment.gridWidth), (environment.random.nextDouble() * environment.gridHeight));		
+	public Oxygen(Environment status) {
+		position = new Double2D((status.random.nextDouble() * status.getGridWidth()), (status.random.nextDouble() * status.getGridHeigh()));		
 		
 	}
 
