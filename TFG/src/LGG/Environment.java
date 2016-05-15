@@ -9,7 +9,6 @@ import sim.util.Double2D;
 import sim.engine.SimState;
 
 public class Environment extends SimState {
-
 	 public Continuous2D environtment;
 	
          //This is a 2D space in which bags
@@ -31,17 +30,6 @@ public class Environment extends SimState {
 		 super.start();
 		 cells = new ArrayList<Cell>();
 		environtment = new Continuous2D(1.0,gridWidth,gridHeight);
-		 //create a 2D
-		 //space for our agents.
-
-		 /*
-		  * Now, let's make n particles and put them into random
-		  *locations in particleSpace
-		  * To do this, we will use the random method built 
-		  * into SimState.
-		  * It has lot's of
-		  * methods, which make generating random locations easier.
-		  */
 
 		 for(int i=0;i < n;i++){
 			 Cell cell = new Cell(this);
@@ -52,7 +40,9 @@ public class Environment extends SimState {
 			 environtment.setObjectLocation(oxygen, oxygen.position);
 			 schedule.scheduleRepeating(oxygen);
 			 
-			 
+			 Glucose glucose = new Glucose(this);
+			 environtment.setObjectLocation(glucose,  glucose.position);
+			 schedule.scheduleRepeating(glucose);
 			 //cellSpace.setObjectLocation(cell, cell.x, cell.y);
 			 
 			 //cells.add(cell);

@@ -13,7 +13,7 @@ public class Cell implements Steppable{
 	public CellState cellState;
 	
 	public Cell(Environment environment) { 
-		position = new Double2D((environment.random.nextDouble() * environment.gridWidth + 1), (environment.random.nextDouble() * environment.gridHeight + 1));
+		position = new Double2D((environment.random.nextDouble() * environment.gridWidth), (environment.random.nextDouble() * environment.gridHeight));
 		//System.out.println("x: "+position.x+" y: "+position.y);
 		cellState = new NormalCellState();
 	}

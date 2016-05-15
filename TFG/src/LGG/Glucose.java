@@ -1,20 +1,18 @@
 package LGG;
 
 import sim.engine.SimState;
+import sim.util.Double2D;
 
 
 
 public class Glucose extends Molecule{
-
-	public Glucose() {
-		// TODO Auto-generated constructor stub
+	private static final long serialVersionUID = 1L;
+	boolean move = true;
+	
+	public Glucose(Environment environment) {
+		position = new Double2D((environment.random.nextDouble() * environment.gridWidth + 1), (environment.random.nextDouble() * environment.gridHeight + 1));		
 	}
 
 
-	@Override
-	public void step(SimState state) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
