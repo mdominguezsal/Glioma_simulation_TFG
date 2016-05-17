@@ -23,18 +23,30 @@ public class NormtoxicCellState implements TumorCellState{
 
 		
 		if(!isSufficientOxygen && !isSufficientGlucose){
-			System.out.println("Insufficient oxygen and glucose for cell in position "+  cell.getPosition().toString());
+			//System.out.println("Insufficient oxygen and glucose for cell in position "+  cell.getPosition().toString());
 			cell.setCellState(new NecroticCellState());
 		}else if(!isSufficientOxygen){
-			System.out.println("Insufficient oxygen for cell in position "+ cell.getPosition().toString());
+			//System.out.println("Insufficient oxygen for cell in position "+ cell.getPosition().toString());
 			cell.setCellState(new HypoxicCellState());
 		}else if(!isSufficientGlucose){
-			System.out.println("Insufficient oxygen for cell in position "+  cell.getPosition().toString());
+			//System.out.println("Insufficient oxygen for cell in position "+  cell.getPosition().toString());
 			cell.setCellState(new HypoglycemicCellState());
 		}
 	}
 	
 	public Color getColor(){
 		return this.color;
+	}
+
+	@Override
+	public int getMovement() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getReplication() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

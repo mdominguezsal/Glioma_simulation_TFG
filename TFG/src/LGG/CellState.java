@@ -9,4 +9,6 @@ public interface CellState {
 	//public void executeState(SimState state, Cell cell);
 	public Color getColor();
 	public void executeState(Environment state, Cell cell);
+	public int getMovement();
+	public int getReplication();
 }

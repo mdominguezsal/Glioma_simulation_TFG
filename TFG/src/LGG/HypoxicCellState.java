@@ -19,10 +19,22 @@ public class HypoxicCellState implements TumorCellState{
 	@Override
 	public void executeState(Environment state, Cell cell) {
 		// TODO Auto-generated method stub
-		System.out.println("Hypoxic State");
+	//	System.out.println("Hypoxic State");
 	}
 
 	public Color getColor(){
 		return this.color;
+	}
+
+	@Override
+	public int getMovement() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getReplication() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

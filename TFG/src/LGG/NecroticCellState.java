@@ -17,7 +17,7 @@ public class NecroticCellState implements CellState{
 	}
 
 	@Override
-	public void executeState(SimState state, Cell cell) {
+	public void executeState(Environment state, Cell cell) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -25,6 +25,18 @@ public class NecroticCellState implements CellState{
 	@Override
 	public Color getColor() {
 		return this.color;
+	}
+
+	@Override
+	public int getMovement() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getReplication() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 

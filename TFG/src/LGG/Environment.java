@@ -18,10 +18,10 @@ public class Environment extends SimState {
         //This allows multiple
 	 //agents or particles to occupy the same cell.
 
-	 private int gridWidth = 100;  //the width of the grid
-	 private int gridHeight = 100; //the height of the grid
+	 private int gridWidth = 300;  //the width of the grid
+	 private int gridHeight = 300; //the height of the grid
 	 private int nCells = 30; //The number of particles
-	 private int nMolecules = 300;
+	 private int nMolecules = 2000;
 	 
 	 public Environment(long seed) {
 		 super(seed);
@@ -55,7 +55,7 @@ public class Environment extends SimState {
 		 //oxygenSpace.setObjectLocation(oxygen, oxygen.x, oxygen.y);
 	 }
 	 
-	 public void setgridWidth(int i){
+	 public void setGridWidth(int i){
 		 this.gridWidth = i;
 	 }
 	 
@@ -63,7 +63,7 @@ public class Environment extends SimState {
 		 return this.gridWidth;
 	 }
 	 
-	 public void setgridHeigh(int i){
+	 public void setGridHeigh(int i){
 		 this.gridHeight = i;
 	 }
 	 

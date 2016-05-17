@@ -25,4 +25,16 @@ public class HypoglycemicCellState implements TumorCellState{
 		return this.color;
 	}
 
+	@Override
+	public int getMovement() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getReplication() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
