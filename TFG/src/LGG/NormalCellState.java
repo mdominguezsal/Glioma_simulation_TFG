@@ -4,27 +4,29 @@ import java.awt.Color;
 
 import sim.engine.SimState;
 
-public class NormalCellState implements CellState{
+public class NormalCellState extends CellState{
 	private final static int MIN_OXYGEN = 1;
 	private final static int MIN_GLUCOSE = 1;
 	private final static float APOPTOSIS = 1;
 	private final static int MOTILITY_RATIO = 1;
-	private int radium = 10;
+	private final static int PROLIFERATION_RATIO = 1;
 	private Metabolism metabolism;
 	private Motility motility;
+	private Proliferation proliferation;
+	private int radium = 10;
 	private Color color = Color.GREEN;
-	private int movement = 1;
-	private int replication;
 	
 	public NormalCellState() {
 		metabolism = new Metabolism(MIN_OXYGEN, MIN_GLUCOSE,APOPTOSIS, radium);
 		motility = new Motility(MOTILITY_RATIO);
+		proliferation = new Proliferation(PROLIFERATION_RATIO);
 	}
 
 	@Override
 	public void executeState(Environment state, Cell cell) {
 		Double randomD = state.random.nextDouble() * 200;
-		int randomI = randomD.intValue();	
+		int randomI = randomD.intValue();
+		//this.metabolism.
 		if(randomI == 1){
 			this.ChangeStateNormtoxicCellState(cell);	
 		}else{
@@ -32,39 +34,16 @@ public class NormalCellState implements CellState{
 			//int randomApoptosisI = randomApoptosis.intValue();
 
 			if(randomI == 2){
-				this.ChangeStateNecrotic(cell);
+				this.ChangeStateNecroticState(cell);
 			}else{
 				if(randomI < 10 && randomI > 1 ){
 					this.motility.Move(cell, state);
 				}else{
 					if(randomI < 20 && randomI > 10 ){
-						//cell.Expand(state);
+						this.proliferation.proliferate(cell, state);
 					}
 				}
 			}
 		}
 	}
-
-	private void ChangeStateNormtoxicCellState(Cell cell){
-		cell.setCellState(new NormtoxicCellState());
-	}
-	
-	private void ChangeStateNecrotic(Cell cell){
-		cell.setCellState(new NecroticCellState());
-	}
-	
-	
-	public Color getColor(){
-		return this.color;
-	}
-
-	public int getMovement(){
-		return this.movement;
-	}
-	
-	public int getReplication(){
-		return this.replication;
-	}
-
-
 }

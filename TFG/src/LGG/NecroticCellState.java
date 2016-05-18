@@ -4,13 +4,16 @@ import java.awt.Color;
 
 import sim.engine.SimState;
 
-public class NecroticCellState implements CellState{
+public class NecroticCellState extends CellState{
 	//private final static int MIN_OXYGEN = 1;
 	//private final static int MIN_GLUCOSE = 1;
 	//private final static float APOPTOSIS = 1;
 	//private int radium = 10;
 	//private Metabolism metabolism;
 	private Color color = Color.GRAY;
+	private Metabolism metabolism;
+	private Motility motility;
+	private Proliferation proliferation;
 	
 	public NecroticCellState() {
 		// TODO Auto-generated constructor stub

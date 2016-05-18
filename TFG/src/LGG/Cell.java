@@ -25,6 +25,11 @@ public class Cell implements Steppable{
 		}
 	}
 	
+	public Cell(CellState cellState, Double2D position ) { 
+		this.cellState = cellState;
+		this.position = position;
+	}
+	
 	public Cell(Double2D p) {
 		this.position = p;
 	}
@@ -90,5 +95,6 @@ public class Cell implements Steppable{
 	public void setCellState(CellState c){
 		this.cellState = c;
 	}
+
 }
 

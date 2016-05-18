@@ -4,49 +4,42 @@ import java.awt.Color;
 
 import sim.engine.SimState;
 
-public class NormtoxicCellState implements TumorCellState{
+public class NormtoxicCellState extends TumorCellState{
 	private final static int MIN_OXYGEN = 1;
 	private final static int MIN_GLUCOSE = 1;
 	private final static float APOPTOSIS = 1;
+	private final static int MOTILITY_RATIO = 1;
+	private final static int PROLIFERATION_RATIO = 1;
+	private Metabolism metabolism;
+	private Motility motility;
+	private Proliferation proliferation;
 	private int radium = 10;
 	private Metabolism metabolism;
+	
 	private Color color = Color.RED;
 	
 	public NormtoxicCellState() {
 		metabolism = new Metabolism(MIN_OXYGEN, MIN_GLUCOSE,APOPTOSIS, radium);
+		motility = new Motility(MOTILITY_RATIO);
+		proliferation = new Proliferation(PROLIFERATION_RATIO);
 	}
 	
 	@Override
 	public void executeState(Environment state, Cell cell) {
-		Boolean isSufficientGlucose = metabolism.sufficientGlucose(state, cell.getPosition());
-		Boolean isSufficientOxygen = metabolism.sufficientOxygen(state, cell.getPosition());
-
-		
-		if(!isSufficientOxygen && !isSufficientGlucose){
-			//System.out.println("Insufficient oxygen and glucose for cell in position "+  cell.getPosition().toString());
-			cell.setCellState(new NecroticCellState());
-		}else if(!isSufficientOxygen){
-			//System.out.println("Insufficient oxygen for cell in position "+ cell.getPosition().toString());
-			cell.setCellState(new HypoxicCellState());
-		}else if(!isSufficientGlucose){
-			//System.out.println("Insufficient oxygen for cell in position "+  cell.getPosition().toString());
-			cell.setCellState(new HypoglycemicCellState());
+		Double randomD = state.random.nextDouble() * 200;
+		int randomI = randomD.intValue();
+		this.metabolism.
+		if(randomI == 1){
+				this.ChangeStateNecroticState(cell);
+			}else{
+				if(randomI < 10 && randomI > 1 ){
+					this.motility.Move(cell, state);
+				}else{
+					if(randomI < 20 && randomI > 10 ){
+						this.proliferation.proliferate(cell, state);
+					}
+				}
+			}
 		}
-	}
-	
-	public Color getColor(){
-		return this.color;
-	}
-
-	@Override
-	public int getMovement() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getReplication() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

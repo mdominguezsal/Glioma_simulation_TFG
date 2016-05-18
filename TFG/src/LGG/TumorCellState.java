@@ -1,9 +1,10 @@
 package LGG;
 
-public interface TumorCellState extends CellState{
-	
-	
-	
-	
+public class TumorCellState extends CellState{
+
+	public void executeState(Environment state, Cell cell) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
