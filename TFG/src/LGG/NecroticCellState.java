@@ -3,45 +3,35 @@ package LGG;
 import java.awt.Color;
 
 import sim.engine.SimState;
+import sim.util.Double2D;
 
 public class NecroticCellState extends CellState{
-	//private final static int MIN_OXYGEN = 1;
-	//private final static int MIN_GLUCOSE = 1;
-	//private final static float APOPTOSIS = 1;
-	//private int radium = 10;
-	//private Metabolism metabolism;
-	private Color color = Color.GRAY;
+	private static final int MIN_GLUCOSE = 0;
+	private static final int MIN_OXYGEN = 0;
+	private static final float APOPTOSIS = 0;
+	private static final int MOTILITY_RATIO = 0;
+	private static final int PROLIFERATION_RATIO = 0;
 	private Metabolism metabolism;
 	private Motility motility;
 	private Proliferation proliferation;
-	
+	private int radium = 10;
+	//private Metabolism metabolism;
+
+
 	public NecroticCellState() {
-		// TODO Auto-generated constructor stub
+		color = Color.MAGENTA;
 	}
 
 	@Override
 	public void executeState(Environment state, Cell cell) {
-		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public Color getColor() {
-		return this.color;
-	}
-
-	@Override
-	public int getMovement() {
 		// TODO Auto-generated method stub
-		return 0;
+		/*System.out.print("necrotyc");
+		System.out.print(cell.getPosition());
+		System.out.print("\n");
+		/*Double2D d = new Double2D(0,0);
+		state.environment.setObjectLocation(this,d);	*/
 	}
-
-	@Override
-	public int getReplication() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 
 	
 }

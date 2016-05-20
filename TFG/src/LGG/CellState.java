@@ -14,31 +14,14 @@ public abstract class CellState {
 	//private Metabolism metabolism;
 	//private Motility motility;
 	//private Proliferation proliferation;
-	private Color color;
+	protected Color color;
 	private int movement;
 	private int replication;
-	
 	
 	public CellState() {
 		
 	}
 
-	protected void ChangeStateNormtoxicCellState(Cell cell){
-		cell.setCellState(new NormtoxicCellState());
-	}
-	
-	protected void ChangeStateNecroticState(Cell cell){
-		cell.setCellState(new NecroticCellState());
-	}
-	
-	protected void ChangeStateHypoglycemicState(Cell cell){
-		cell.setCellState(new HypoglycemicCellState());
-	}
-	
-	protected void ChangeStateHypoxicState(Cell cell){
-		cell.setCellState(new HypoglycemicCellState());
-	}
-	
 	public Color getColor(){
 		return this.color;
 	}

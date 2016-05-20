@@ -10,7 +10,7 @@ import sim.engine.SimState;
 import sim.engine.Stoppable;
 
 public class Environment extends SimState {
-	 public Continuous2D environtment;
+	 public Continuous2D environment;
 	
          //This is a 2D space in which bags
 	  //are created for each cell once an
@@ -20,7 +20,7 @@ public class Environment extends SimState {
 
 	 private int gridWidth = 300;  //the width of the grid
 	 private int gridHeight = 300; //the height of the grid
-	 private int nCells = 30; //The number of particles
+	 private int nCells = 10; //The number of particles
 	 private int nMolecules = 2000;
 	 
 	 public Environment(long seed) {
@@ -29,24 +29,24 @@ public class Environment extends SimState {
 
 	 public void start(){
 		 super.start();
-		environtment = new Continuous2D(1.0,gridWidth,gridHeight);
+		environment = new Continuous2D(1.0,gridWidth,gridHeight);
 
 		 for(int i=0;i < nCells;i++){
 			 Cell cell = new Cell(this);
-			 environtment.setObjectLocation(cell, cell.getPosition());
+			 environment.setObjectLocation(cell, cell.getPosition());
 			 schedule.scheduleRepeating(cell);
 			 //Stoppable stopCell = schedule.schedulerepeating(cell);
 		 }
 
 		 for(int i=0;i < nMolecules;i++){
 			 Oxygen oxygen = new Oxygen(this);
-			 environtment.setObjectLocation(oxygen, oxygen.position);
+			 environment.setObjectLocation(oxygen, oxygen.position);
 			 schedule.scheduleRepeating(oxygen);
 			 Stoppable stopOx = schedule.scheduleRepeating(oxygen);
 			 oxygen.setStop(stopOx);
 
 			 Glucose glucose = new Glucose(this);
-			 environtment.setObjectLocation(glucose, glucose.position);
+			 environment.setObjectLocation(glucose, glucose.position);
 			 Stoppable stopGlu = schedule.scheduleRepeating(glucose);
 			 glucose.setStop(stopGlu);
 		 }

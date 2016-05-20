@@ -29,7 +29,7 @@ public class Motility implements Behaviour{
 				System.out.print("Move cell to:");
 				System.out.print(newPosition);
 				Environment status = (Environment)eState;
-				status.environtment.setObjectLocation(cell, newPosition);
+				status.environment.setObjectLocation(cell, newPosition);
 			}
 		}
 	}
@@ -54,7 +54,7 @@ public class Motility implements Behaviour{
 
 	
 	private boolean cellInPosition(Double2D position, Environment state){
-		Bag b = state.environtment.getObjectsAtLocation(position);	
+		Bag b = state.environment.getObjectsAtLocation(position);	
 		if(b == null) return false;
 		System.out.print("\n");
 		Iterator i =b.iterator();

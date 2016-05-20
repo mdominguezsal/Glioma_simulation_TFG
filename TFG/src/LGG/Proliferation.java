@@ -29,7 +29,7 @@ public class Proliferation implements Behaviour{
 				System.out.print(newPosition);
 				Environment status = (Environment)eState;
 				Cell newCell = new Cell(cell.getCellState(),newPosition);
-				status.environtment.setObjectLocation(newCell, newPosition);
+				status.environment.setObjectLocation(newCell, newPosition);
 				status.schedule.scheduleRepeating(newCell);
 			}
 		}
@@ -56,10 +56,10 @@ public class Proliferation implements Behaviour{
 
 	
 	private boolean cellInPosition(Double2D position, Environment state){
-		Bag b = state.environtment.getObjectsAtLocation(position);	
+		Bag b = state.environment.getObjectsAtLocation(position);	
 		if(b == null) return false;
 		System.out.print("\n");
-		Iterator i =b.iterator();
+		Iterator i = b.iterator();
 		while(i.hasNext()){
 			Object obj = i.next();
 			if(obj.getClass() == Cell.class){

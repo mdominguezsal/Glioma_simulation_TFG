@@ -52,8 +52,9 @@ public class LGGWithUi extends GUIState {
 
 	private void setupPortrayals() {
 		Environment se = (Environment)state;
-		portrayal.setField(se.environtment);
+		portrayal.setField(se.environment);
 		OvalPortrayal2D cellPortrayal = new OvalPortrayal2D(){
+			@Override
 		    public void draw(Object object, Graphics2D graphics, DrawInfo2D info){
 		    	Cell cell = (Cell)object;
 		    	paint = cell.getCellState().getColor();
@@ -87,8 +88,6 @@ public class LGGWithUi extends GUIState {
 		displayFrame.setVisible(true);
 		display.setBackdrop(Color.black);
 		display.attach(portrayal,"Cells");
-		//display.attach(nutrientsPortrayal, "o");
-		
 	}
 
 

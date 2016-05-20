@@ -13,12 +13,14 @@ public class Cell implements Steppable{
 	private CellState cellState;
 	
 	public Cell(Environment state) { 
-		position = new Double2D((state.random.nextDouble() * (state.getGridWidth()/3)), (state.random.nextDouble() * (state.getGridHeigh()/2)));
-		//System.out.println("x: "+position.x+" y: "+position.y);
+		this.position = new Double2D((state.random.nextDouble() * (state.getGridWidth()/3)*2 - (state.getGridWidth()/3)), (state.random.nextDouble() * (state.getGridHeigh()/3)*2)-(state.getGridWidth()/3));
+		System.out.println("x: "+position.x+" y: "+position.y);
 
-		Double randomTumourCell = state.random.nextDouble()* 25;
-		int i = randomTumourCell.intValue();
-		if( i == 1 || i == 2) {
+		Double randomCell = state.random.nextDouble()* 25;
+		int i = randomCell.intValue();
+		//this.cellState = new NecroticCellState(); 
+		if(i < 3) {
+			//this.
 			cellState = new NormtoxicCellState();
 		}else{
 			cellState = new NormalCellState();
@@ -38,7 +40,7 @@ public class Cell implements Steppable{
 	@Override
 	public void step(SimState state) {
 		cellState.executeState((Environment) state, this);
-		
+		((Environment) state).environment.setObjectLocation(this, this.getPosition());
 		//Environment t = (Environment)state;
 		//Expand(t);
 		//Move(t);
@@ -78,6 +80,21 @@ public class Cell implements Steppable{
 
 	
 
+	protected void ChangeStateNormtoxicCellState(){
+		this.setCellState(new NormtoxicCellState());
+	}
+	
+	protected void ChangeStateNecroticState(){
+		this.setCellState(new NecroticCellState());
+	}
+	
+	protected void ChangeStateHypoglycemicState( ){
+		this.setCellState(new HypoglycemicCellState());
+	}
+	
+	protected void ChangeStateHypoxicState( ){
+		this.setCellState(new HypoxicCellState());
+	}
 	
 	
 	public Double2D getPosition(){
