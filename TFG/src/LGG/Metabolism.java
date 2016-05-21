@@ -21,7 +21,7 @@ public class Metabolism implements Behaviour{
 	}
 
 	public void metabolismExecution(SimState state, Cell cell){
-		System.out.print(this.sufficientGlucose(state, cell.getPosition()));
+		//System.out.print(this.sufficientGlucose(state, cell.getPosition()));
 		
 		//if(!this.sufficientGlucose(state, cell.getPosition())){
 			//if(cell.getCellState().getClass() == NormtoxicCellState.class) 	cell.ChangeStateHypoglycemicState();

@@ -19,7 +19,7 @@ public class NecroticCellState extends CellState{
 
 
 	public NecroticCellState() {
-		color = Color.MAGENTA;
+		color = Color.GRAY;
 	}
 
 	@Override

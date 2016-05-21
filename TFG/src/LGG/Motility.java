@@ -8,6 +8,7 @@ import sim.util.Double2D;
 
 public class Motility implements Behaviour{
 	int ratio;
+	private Double radium = (double) 5;
 
 	public Motility(int motilityRatio) {
 		this.ratio = motilityRatio;
@@ -17,23 +18,25 @@ public class Motility implements Behaviour{
 		Double2D cellPosition = cell.getPosition();
 		Double randomD = eState.random.nextDouble() * 2;
 		int randomI = randomD.intValue();
-		System.out.print("ratio:");
-		System.out.print(randomI == this.ratio);
-		System.out.print("\n");
+		//System.out.print("ratio:");
+		//System.out.print(randomI == this.ratio);
+		//System.out.print("\n");
 		if(randomI == this.ratio){
-			Double2D newPosition = assignPosition(eState, cellPosition);
-			System.out.print("check:");
-			System.out.print(cellInPosition(newPosition, eState));
-			System.out.print("\n");
-			if(!cellInPosition(newPosition, eState)){
-				System.out.print("Move cell to:");
-				System.out.print(newPosition);
+			Double2D newPosition = eState.getNewPosition(cellPosition);
+		//	System.out.print("check:");
+			//System.out.print(cellInPosition(newPosition, eState));
+		//	System.out.print("\n");
+			
+			
+			if(!eState.cellInPosition(newPosition)){
+				//System.out.print("Move cell to:");
+			//	System.out.print(newPosition);
 				Environment status = (Environment)eState;
 				status.environment.setObjectLocation(cell, newPosition);
 			}
 		}
 	}
-	
+	/*
 	private Double2D assignPosition(SimState state, Double2D cellPosition){
 		Double2D movePosition = null;
 		Double move = state.random.nextDouble() * 4;	
@@ -51,10 +54,11 @@ public class Motility implements Behaviour{
 
 		return movePosition;
 	}
-
-	
+*/
+	/*
 	private boolean cellInPosition(Double2D position, Environment state){
-		Bag b = state.environment.getObjectsAtLocation(position);	
+		Bag b = state.environment.getNeighborsExactlyWithinDistance(position, radium);
+				//state.environment.getObjectsAtLocation(position);	
 		if(b == null) return false;
 		System.out.print("\n");
 		Iterator i =b.iterator();
@@ -65,7 +69,7 @@ public class Motility implements Behaviour{
 			}
 		}
 		return false;
-	}
+	}*/
 
 
 

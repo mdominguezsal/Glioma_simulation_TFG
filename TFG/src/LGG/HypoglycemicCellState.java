@@ -20,7 +20,7 @@ public class HypoglycemicCellState extends TumorCellState{
 		this.metabolism = new Metabolism(MIN_OXYGEN, MIN_GLUCOSE,APOPTOSIS, radium);
 		this.motility = new Motility(MOTILITY_RATIO);
 		this.proliferation = new Proliferation(PROLIFERATION_RATIO);
-		this.color = Color.PINK;
+		this.color = Color.MAGENTA;
 	}
 
 	@Override
@@ -31,17 +31,18 @@ public class HypoglycemicCellState extends TumorCellState{
 			cell.ChangeStateNormtoxicCellState();	
 		}else{
 			if(randomI == 2){
+				//this.metabolism.metabolismExecution(state, cell);
 				cell.ChangeStateNecroticState();
 			}else{
-			//	if(randomI < 10 && randomI > 1 ){
-				//	this.motility.Move(cell, state);
-				//}else{
+				if(randomI < 10 && randomI > 1 ){
+					this.motility.Move(cell, state);
+				}else{
 					if(randomI < 20 && randomI > 10 ){
 						this.proliferation.proliferate(cell, state);
 					}
-			//	}
+					//	}
+				}
 			}
 		}
-		
 	}
 }

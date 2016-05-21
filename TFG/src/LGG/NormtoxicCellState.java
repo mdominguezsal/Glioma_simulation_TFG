@@ -27,7 +27,7 @@ public class NormtoxicCellState extends TumorCellState{
 	public void executeState(Environment state, Cell cell) {
 		Double randomD = state.random.nextDouble() * 200;
 		int randomI = randomD.intValue();
-		//this.metabolism.metabolismExecution(state, cell);
+		this.metabolism.metabolismExecution(state, cell);
 		if(randomI == 1){
 			//cell.ChangeStateNecroticState();
 		}else{

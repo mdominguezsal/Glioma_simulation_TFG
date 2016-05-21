@@ -13,17 +13,22 @@ public class Cell implements Steppable{
 	private CellState cellState;
 	
 	public Cell(Environment state) { 
-		this.position = new Double2D((state.random.nextDouble() * (state.getGridWidth()/3)*2 - (state.getGridWidth()/3)), (state.random.nextDouble() * (state.getGridHeigh()/3)*2)-(state.getGridWidth()/3));
-		System.out.println("x: "+position.x+" y: "+position.y);
-
-		Double randomCell = state.random.nextDouble()* 25;
-		int i = randomCell.intValue();
-		//this.cellState = new NecroticCellState(); 
-		if(i < 3) {
-			//this.
-			cellState = new NormtoxicCellState();
-		}else{
-			cellState = new NormalCellState();
+		Boolean validPosition = false;
+		while(!validPosition){
+			this.position =  state.getNewCellPosition();
+			if(!state.cellInPosition(this.position)) validPosition = true;
+		}
+		if(!state.cellInPosition(this.position)){
+			//System.out.println("x: "+position.x+" y: "+position.y);
+			Double randomCell = state.random.nextDouble()* 25;
+			int i = randomCell.intValue();
+			//this.cellState = new NecroticCellState(); 
+			if(i < 3) {
+				//this.
+				cellState = new NormtoxicCellState();
+			}else{
+				cellState = new NormalCellState();
+			}
 		}
 	}
 	

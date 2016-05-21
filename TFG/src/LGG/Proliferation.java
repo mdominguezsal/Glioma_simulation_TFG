@@ -8,6 +8,9 @@ import sim.util.Double2D;
 
 public class Proliferation implements Behaviour{
 	int ratio;
+	private Double radium = (double) 5;
+	
+	
 	public Proliferation(int proliferationRatio) {
 		this.ratio = proliferationRatio;
 	}
@@ -16,17 +19,18 @@ public class Proliferation implements Behaviour{
 		Double2D cellPosition = cell.getPosition();
 		Double randomD = eState.random.nextDouble() * 2;
 		int randomI = randomD.intValue();
-		System.out.print("ratio:");
-		System.out.print(randomI == this.ratio);
-		System.out.print("\n");
+		//System.out.print("ratio:");
+		//System.out.print(randomI == this.ratio);
+		//System.out.print("\n");
 		if(randomI == this.ratio){
-			Double2D newPosition = assignPosition(eState, cellPosition);
-			System.out.print("check:");
-			System.out.print(cellInPosition(newPosition, eState));
-			System.out.print("\n");
-			if(!cellInPosition(newPosition, eState)){
-				System.out.print("Proliferate cell to:");
-				System.out.print(newPosition);
+			Double2D newPosition = eState.getNewPosition( cellPosition);
+			//System.out.print("check:");
+			//System.out.print(cellInPosition(newPosition, eState));
+			//System.out.print("\n");
+
+			if(!eState.cellInPosition(newPosition)){
+				//System.out.print("Proliferate cell to:");
+				//System.out.print(newPosition);
 				Environment status = (Environment)eState;
 				Cell newCell = new Cell(cell.getCellState(),newPosition);
 				status.environment.setObjectLocation(newCell, newPosition);
@@ -36,8 +40,8 @@ public class Proliferation implements Behaviour{
 	}
 	
 	
-	private Double2D assignPosition(SimState state, Double2D cellPosition){
-		Double2D movePosition = null;
+	/*private Double2D assignPosition(Environment state, Double2D cellPosition){
+		Double2D movePosition = state.getNewPosition(cellPosition);
 		Double move = state.random.nextDouble() * 4;	
 		int randomI = move.intValue();	
 		
@@ -52,11 +56,11 @@ public class Proliferation implements Behaviour{
 		}	
 
 		return movePosition;
-	}
+	}*/
 
-	
+	/*
 	private boolean cellInPosition(Double2D position, Environment state){
-		Bag b = state.environment.getObjectsAtLocation(position);	
+		Bag b = state.environment.getNeighborsExactlyWithinDistance(position, radium);
 		if(b == null) return false;
 		System.out.print("\n");
 		Iterator i = b.iterator();
@@ -67,5 +71,5 @@ public class Proliferation implements Behaviour{
 			}
 		}
 		return false;
-	}
+	}*/
 }
