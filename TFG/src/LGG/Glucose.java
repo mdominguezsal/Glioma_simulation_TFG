@@ -9,7 +9,6 @@ public class Glucose extends Molecule{
 
 	public Glucose(Double2D position) {
 		this.position = position;			
-		this.color = color.WHITE;
 	}
 
 

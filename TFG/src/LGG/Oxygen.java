@@ -9,7 +9,6 @@ public class Oxygen extends Molecule{
 	
 	public Oxygen(Double2D position) {
 		this.position = position;		
-		this.color = color.CYAN;
 	}
 
 }

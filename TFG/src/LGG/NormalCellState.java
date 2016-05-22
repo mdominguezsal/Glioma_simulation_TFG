@@ -27,25 +27,37 @@ public class NormalCellState extends CellState{
 		Double randomD = state.random.nextDouble() * 200;
 		int randomI = randomD.intValue();
 		
+		Boolean suffOxygen = this.metabolism.sufficientOxygen(state, cell.getPosition());
+		Boolean suffGlucose = this.metabolism.sufficientGlucose(state, cell.getPosition());
+
+
 		if(randomI == 1){
 			cell.ChangeStateNormtoxicCellState();	
 		}else{
-			//this.metabolism.metabolismExecution(state, cell);
-			//Double randomApoptosis = state.random.nextDouble() * 200;
-			//int randomApoptosisI = randomApoptosis.intValue();
-
-			if(randomI == 2){
-				cell.ChangeStateNecroticState();
-			}else{
-				if(randomI < 10 && randomI > 1 ){
-					this.motility.Move(cell, state);
-				}else{
-					if(randomI < 20 && randomI > 10 ){
-						this.proliferation.proliferate(cell, state);
-					}
-				}
+			this.motility.Move(cell, state);
+			if(randomI >= 195){
+				
+				if( !suffOxygen || suffGlucose)	cell.ChangeStateNecroticState();
+				//Double randomApoptosis = state.random.nextDouble() * 200;
+				//int randomApoptosisI = randomApoptosis.intValue();
 			}
-		}
+			if(randomI == 2) cell.ChangeStateNecroticState();
+			if(randomI == 3) this.motility.Move(cell, state);
+		if(randomI == 10) this.proliferation.proliferate(cell, state);
+				//if(randomI < 10 && randomI > 1 ){
+				
+				//}else{
+				//	if(randomI < 20 && randomI > 10 ){
+				//	this.proliferation.proliferate(cell, state);
+				//}
+			}
+			//}
+			//}
+		//}
 	}
 	
+	
+	public void necroticCellsAround(Environment state){
+		
+	}
 }

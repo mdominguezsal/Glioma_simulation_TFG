@@ -11,19 +11,20 @@ import sim.util.Double2D;
 public class Cell implements Steppable{
 	private Double2D position;
 	private CellState cellState;
+	private int radium = 5;
 	
 	public Cell(Environment state) { 
 		Boolean validPosition = false;
 		while(!validPosition){
-			this.position =  state.getNewCellPosition();
-			if(!state.cellInPosition(this.position)) validPosition = true;
+			this.position =  state.newCellPosition();
+			if(!state.cellInPosition(this.position, this.hashCode(), this.radium)) validPosition = true;
 		}
-		if(!state.cellInPosition(this.position)){
+		if(!state.cellInPosition(this.position, this.hashCode(), this.radium)){
 			//System.out.println("x: "+position.x+" y: "+position.y);
-			Double randomCell = state.random.nextDouble()* 25;
+			Double randomCell = state.random.nextDouble()* 100;
 			int i = randomCell.intValue();
 			//this.cellState = new NecroticCellState(); 
-			if(i < 3) {
+			if(i == 0) {
 				//this.
 				cellState = new NormtoxicCellState();
 			}else{
@@ -118,5 +119,9 @@ public class Cell implements Steppable{
 		this.cellState = c;
 	}
 
+
+	public int getRadium(){
+		return this.radium;
+	}
 }
 

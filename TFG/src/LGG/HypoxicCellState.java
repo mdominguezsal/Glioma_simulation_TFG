@@ -8,7 +8,7 @@ public class HypoxicCellState extends TumorCellState{
 	private final static int MIN_OXYGEN = 1;
 	private final static int MIN_GLUCOSE = 1;
 	private final static float APOPTOSIS = 1;
-	private final static int MOTILITY_RATIO = 1;
+	private final static int MOTILITY_RATIO = 5;
 	private final static int PROLIFERATION_RATIO = 1;
 	private int radium = 10;
 	private Metabolism metabolism;
@@ -19,7 +19,7 @@ public class HypoxicCellState extends TumorCellState{
 		this.metabolism = new Metabolism(MIN_OXYGEN, MIN_GLUCOSE,APOPTOSIS, radium);
 		this.motility = new Motility(MOTILITY_RATIO);
 		this.proliferation = new Proliferation(PROLIFERATION_RATIO);
-		this.color = Color.ORANGE;
+		this.color = Color.BLUE;
 	}
 
 	public void executeState(Environment state, Cell cell) {

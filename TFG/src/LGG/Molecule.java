@@ -15,7 +15,6 @@ public class Molecule implements Steppable{
 	boolean stopObject = false;
 	private Stoppable stopObj;
 	private Double radium = (double) 5;
-	protected Color color;
 	
 	public void step(SimState state) {
 		Environment eState = ((Environment)state);
@@ -24,28 +23,7 @@ public class Molecule implements Steppable{
 			return;
 		}
 		
-		Double2D movePosition = eState.getNewPosition(position);
-		/*Double move = state.random.nextDouble() * 8;
-
-		int i = move.intValue();
-	
-		if (i == 0){
-			movePosition = new Double2D(position.x+1, position.y);
-		}else if( i == 1){
-			movePosition = new Double2D(position.x, position.y+1);
-		}else if(i==2){
-			 movePosition = new Double2D(position.x-1, position.y);
-		}else if(i==3){
-			movePosition = new Double2D(position.x, position.y-1);
-		}else if(i==4){
-			movePosition = new Double2D(position.x+1, position.y+1);
-		}else if(i==5){
-			movePosition = new Double2D(position.x-1, position.y-1);
-		}else if(i==6){
-			movePosition = new Double2D(position.x-1, position.y+1);
-		}else if(i==7){
-			movePosition = new Double2D(position.x+1, position.y-1);
-		}*/
+		Double2D movePosition = eState.newPosition(position);
 		
 		//Environment eState = (Environment)state;
 		if(movePosition.x < 0) movePosition.add(new Double2D(2, 0));
@@ -57,7 +35,7 @@ public class Molecule implements Steppable{
 			this.position = movePosition;
 			eState.environment.setObjectLocation(this, movePosition);	
 		}else{
-			this.position = movePosition.multiply(2);
+			this.position = movePosition.multiply(20);
 		}
 	}
 	

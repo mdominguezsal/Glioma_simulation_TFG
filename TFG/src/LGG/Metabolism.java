@@ -20,21 +20,23 @@ public class Metabolism implements Behaviour{
 		this.distance = distance;
 	}
 
-	public void metabolismExecution(SimState state, Cell cell){
+	/*public void metabolismExecution(SimState state, Cell cell){
 		//System.out.print(this.sufficientGlucose(state, cell.getPosition()));
 		
-		//if(!this.sufficientGlucose(state, cell.getPosition())){
-			//if(cell.getCellState().getClass() == NormtoxicCellState.class) 	cell.ChangeStateHypoglycemicState();
+		if(!this.sufficientGlucose(state, cell.getPosition())){
+		//if(cell.getCellState().getClass() == NormtoxicCellState.class) 	cell.ChangeStateHypoglycemicState();
 
-			//if(cell.getCellState().getClass() == NormalCellState.class)	cell.ChangeStateNecroticState();
+			if(cell.getCellState().getClass() == NormalCellState.class)	cell.ChangeStateNecroticState();
 			/*if(cell.getCellState().getClass() == HypoglycemicCellState.class){
 				Double randomD = state.random.nextDouble() * 200;
 				int randomI = randomD.intValue();
 				if(count > randomI)  cell.getCellState().ChangeStateNecroticState(cell);
 				count = count++;
 		}
-		/*if(!this.sufficientOxygen(state, cell.getPosition())){
-			if(cell.getCellState().getClass() == NormtoxicCellState.class) 	cell.getCellState().ChangeStateHypoglycemicState(cell);
+		if(!this.sufficientOxygen(state, cell.getPosition())){
+			if(cell.getCellState().getClass() == NormalCellState.class)	cell.ChangeStateNecroticState();
+			
+			/*if(cell.getCellState().getClass() == NormtoxicCellState.class) 	cell.getCellState().ChangeStateHypoglycemicState(cell);
 
 			if(cell.getCellState().getClass() == NormtoxicCellState.class) 	cell.getCellState().ChangeStateHypoxicState(cell);
 
@@ -48,10 +50,10 @@ public class Metabolism implements Behaviour{
 				if(count > randomI)  cell.getCellState().ChangeStateNecroticState(cell);
 				count = count++;
 			}
-		}	*/
-	}
+		}	
+	}*/
 	
-	private boolean sufficientOxygen(SimState state, Double2D position){
+	public boolean sufficientOxygen(SimState state, Double2D position){
 		Environment t = (Environment)state;
 		int i = 0;
 		Boolean sufficientOxygen = false;
@@ -74,7 +76,7 @@ public class Metabolism implements Behaviour{
 		return sufficientOxygen;	
 	}
 	
-	private boolean sufficientGlucose(SimState state, Double2D position){
+	public boolean sufficientGlucose(SimState state, Double2D position){
 		Environment t = (Environment)state;
 		int i = 0;
 		Boolean sufficientGlu = false;

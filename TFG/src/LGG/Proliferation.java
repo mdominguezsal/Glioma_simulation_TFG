@@ -8,9 +8,7 @@ import sim.util.Double2D;
 
 public class Proliferation implements Behaviour{
 	int ratio;
-	private Double radium = (double) 5;
-	
-	
+		
 	public Proliferation(int proliferationRatio) {
 		this.ratio = proliferationRatio;
 	}
@@ -19,23 +17,18 @@ public class Proliferation implements Behaviour{
 		Double2D cellPosition = cell.getPosition();
 		Double randomD = eState.random.nextDouble() * 2;
 		int randomI = randomD.intValue();
-		//System.out.print("ratio:");
+		System.out.print("proliferate:");
 		//System.out.print(randomI == this.ratio);
 		//System.out.print("\n");
-		if(randomI == this.ratio){
-			Double2D newPosition = eState.getNewPosition( cellPosition);
-			//System.out.print("check:");
-			//System.out.print(cellInPosition(newPosition, eState));
-			//System.out.print("\n");
+		//if(randomI == this.ratio){
+		Double2D newPosition = eState.newCopyCellPosition(cell.getPosition());
+			if(!eState.cellInPosition(newPosition, this.hashCode(), cell.getRadium())){
 
-			if(!eState.cellInPosition(newPosition)){
-				//System.out.print("Proliferate cell to:");
-				//System.out.print(newPosition);
 				Environment status = (Environment)eState;
 				Cell newCell = new Cell(cell.getCellState(),newPosition);
 				status.environment.setObjectLocation(newCell, newPosition);
 				status.schedule.scheduleRepeating(newCell);
-			}
+			//}
 		}
 	}
 	

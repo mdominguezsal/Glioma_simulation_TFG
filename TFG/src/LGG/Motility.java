@@ -8,7 +8,6 @@ import sim.util.Double2D;
 
 public class Motility implements Behaviour{
 	int ratio;
-	private Double radium = (double) 5;
 
 	public Motility(int motilityRatio) {
 		this.ratio = motilityRatio;
@@ -18,21 +17,24 @@ public class Motility implements Behaviour{
 		Double2D cellPosition = cell.getPosition();
 		Double randomD = eState.random.nextDouble() * 2;
 		int randomI = randomD.intValue();
-		//System.out.print("ratio:");
+		//System.out.print("Move:");
 		//System.out.print(randomI == this.ratio);
 		//System.out.print("\n");
 		if(randomI == this.ratio){
-			Double2D newPosition = eState.getNewPosition(cellPosition);
+			Double2D newPosition = eState.newPosition(cellPosition);
 		//	System.out.print("check:");
 			//System.out.print(cellInPosition(newPosition, eState));
 		//	System.out.print("\n");
 			
-			
-			if(!eState.cellInPosition(newPosition)){
+			//newPosition = new Double2D(newPosition.x + 5, newPosition.y + 5);
+					
+			if(!eState.cellInPosition(newPosition, cell.hashCode(), cell.getRadium())){
+				cell.setPosition(newPosition);
 				//System.out.print("Move cell to:");
 			//	System.out.print(newPosition);
-				Environment status = (Environment)eState;
-				status.environment.setObjectLocation(cell, newPosition);
+				//Environment status = (Environment)eState;
+				eState.environment.setObjectLocation(cell, newPosition);
+				//eState.schedule.scheduleRepeating(cell);
 			}
 		}
 	}
@@ -54,7 +56,7 @@ public class Motility implements Behaviour{
 
 		return movePosition;
 	}
-*/
+
 	/*
 	private boolean cellInPosition(Double2D position, Environment state){
 		Bag b = state.environment.getNeighborsExactlyWithinDistance(position, radium);

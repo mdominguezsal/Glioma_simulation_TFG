@@ -9,7 +9,7 @@ public class NormtoxicCellState extends TumorCellState{
 	private final static int MIN_GLUCOSE = 1;
 	private final static float APOPTOSIS = 1;
 	private final static int MOTILITY_RATIO = 1;
-	private final static int PROLIFERATION_RATIO = 1;
+	private final static int PROLIFERATION_RATIO = 2;
 	private Metabolism metabolism;
 	private Motility motility;
 	private Proliferation proliferation;
@@ -27,18 +27,24 @@ public class NormtoxicCellState extends TumorCellState{
 	public void executeState(Environment state, Cell cell) {
 		Double randomD = state.random.nextDouble() * 200;
 		int randomI = randomD.intValue();
-		this.metabolism.metabolismExecution(state, cell);
+		Boolean suffOxygen = this.metabolism.sufficientOxygen(state, cell.getPosition());
+		Boolean suffGlucose = this.metabolism.sufficientGlucose(state, cell.getPosition());
+
+		//if(!suffOxygen && !suffGlucose) cell.ChangeStateNecroticState();
+		//if(!suffOxygen) cell.ChangeStateHypoxicState(); 
+		//if(!suffGlucose)cell.ChangeStateHypoglycemicState();
+
 		if(randomI == 1){
 			//cell.ChangeStateNecroticState();
 		}else{
-			if(randomI < 10 && randomI > 1 ){
+			if(randomI < 80 && randomI > 1 ){
 				this.motility.Move(cell, state);
-			}else{
-				if(randomI < 20 && randomI > 10 ){
-					this.proliferation.proliferate(cell, state);
-				}
+			}
+			if(randomI < 200 && randomI > 120 ){
+				this.proliferation.proliferate(cell, state);
 			}
 		}
 	}
+
 
 }

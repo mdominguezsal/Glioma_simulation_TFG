@@ -63,8 +63,9 @@ public class LGGWithUi extends GUIState {
 			}
 		};
 		portrayal.setPortrayalForClass(Cell.class, cellPortrayal);
-		portrayal.setPortrayalForClass(Oxygen.class, new OvalPortrayal2D(Color.WHITE));
-		portrayal.setPortrayalForClass(Glucose.class, new OvalPortrayal2D(Color.cyan));
+		portrayal.setPortrayalForClass(Oxygen.class, new OvalPortrayal2D(Color.CYAN));
+		portrayal.setPortrayalForClass(Glucose.class, new OvalPortrayal2D(Color.WHITE));
+		portrayal.setPortrayalForClass(Termozolomide.class,  new OvalPortrayal2D(Color.RED));
 
 		//cellPortrayal.setField(se.environtment);
 		
@@ -86,7 +87,7 @@ public class LGGWithUi extends GUIState {
 		displayFrame = display.createFrame();
 		c.registerFrame(displayFrame);
 		displayFrame.setVisible(true);
-		display.setBackdrop(Color.black);
+		display.setBackdrop(Color.BLACK);
 		display.attach(portrayal,"Cells");
 	}
 
