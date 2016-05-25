@@ -7,10 +7,10 @@ import sim.util.Bag;
 import sim.util.Double2D;
 
 public class Proliferation implements Behaviour{
-	int ratio;
+	double proliferationRate;
 		
-	public Proliferation(int proliferationRatio) {
-		this.ratio = proliferationRatio;
+	public Proliferation(double d) {
+		this.proliferationRate = d;
 	}
 
 	public void proliferate(Cell cell,Environment eState){
@@ -31,7 +31,7 @@ public class Proliferation implements Behaviour{
 			//}
 		}
 	}
-	
+
 	
 	/*private Double2D assignPosition(Environment state, Double2D cellPosition){
 		Double2D movePosition = state.getNewPosition(cellPosition);

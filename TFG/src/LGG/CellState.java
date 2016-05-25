@@ -4,6 +4,7 @@ package LGG;
 import java.awt.Color;
 
 import sim.engine.SimState;
+import sim.util.Double2D;
 
 public abstract class CellState {
 	//private final int minOxygen;
@@ -36,5 +37,7 @@ public abstract class CellState {
 
 	public void executeState(Environment state, Cell cell) {	
 	}
+
+	
 
 }

@@ -7,13 +7,13 @@ import sim.util.Double2D;
 import sim.engine.SimState;
 
 public class Metabolism implements Behaviour{
-	int min_Oxygen;
-	int min_Glucose;
-	float apoptosis;
+	Double min_Oxygen;
+	Double min_Glucose;
+	Double apoptosis;
 	int distance;
 	int count = 0;
 
-	public Metabolism(int oxygen, int glucose, float apoptosis, int distance) {
+	public Metabolism(Double oxygen, Double glucose, Double apoptosis, int distance) {
 		this.min_Oxygen = oxygen;
 		this.min_Glucose = glucose;
 		this.apoptosis = apoptosis;
@@ -53,12 +53,12 @@ public class Metabolism implements Behaviour{
 		}	
 	}*/
 	
-	public boolean sufficientOxygen(SimState state, Double2D position){
+	public boolean sufficientOxygen(SimState state, Cell cell){
 		Environment t = (Environment)state;
 		int i = 0;
 		Boolean sufficientOxygen = false;
 		
-		Bag agentsList = t.environment.getNeighborsWithinDistance(position, distance);
+		Bag agentsList = t.environment.getNeighborsWithinDistance(cell.getPosition(), distance);
 		//System.out.println("Cell in position "+position+ " Checking distance "+distance);
 		Iterator<Object> it = agentsList.iterator();
 		
@@ -76,12 +76,12 @@ public class Metabolism implements Behaviour{
 		return sufficientOxygen;	
 	}
 	
-	public boolean sufficientGlucose(SimState state, Double2D position){
+	public boolean sufficientGlucose(SimState state, Cell cell){
 		Environment t = (Environment)state;
 		int i = 0;
 		Boolean sufficientGlu = false;
 		
-		Bag agentsList = t.environment.getNeighborsWithinDistance(position, distance);
+		Bag agentsList = t.environment.getNeighborsWithinDistance(cell.getPosition(), distance);
 		//System.out.println("Cell in position "+position+ " Checking distance "+distance);
 		Iterator<Object> it = agentsList.iterator();
 

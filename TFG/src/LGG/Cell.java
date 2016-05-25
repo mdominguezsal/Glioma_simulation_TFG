@@ -12,27 +12,31 @@ public class Cell implements Steppable{
 	private Double2D position;
 	private CellState cellState;
 	private int radium = 5;
+	private int distance;
 	
 	public Cell(Environment state) { 
 		Boolean validPosition = false;
 		while(!validPosition){
-			this.position =  state.newCellPosition();
+			this.position =  state.newCellPositionInit();
 			if(!state.cellInPosition(this.position, this.hashCode(), this.radium)) validPosition = true;
 		}
 		if(!state.cellInPosition(this.position, this.hashCode(), this.radium)){
+			Double proliferationRate = this.proliferationRate(state, position);
 			//System.out.println("x: "+position.x+" y: "+position.y);
 			Double randomCell = state.random.nextDouble()* 100;
 			int i = randomCell.intValue();
 			//this.cellState = new NecroticCellState(); 
 			if(i == 0) {
 				//this.
-				cellState = new NormtoxicCellState();
-			}else{
-				cellState = new NormalCellState();
+				cellState = new NormtoxicCellState(state.getOxygenConsumtionNormotoxic(), state.getGluConsumtionNormotoxic(), state.getRandomchangetoNecrotic(), state.getMotilityRatioNormotoxic(), state.getProliferationRatioNormotoxic(), state.getTermozolimide());
+				int nTumorCells = state.getnNormtoxicCells();
+				state.setnNormtoxicCells(nTumorCells++);
+			}else{ 
+				cellState = new NormalCellState(state.getOxygenConsumtionNormal(), state.getGluConsumtionNormal(), state.getRandomchangetoNecrotic(), state.getRandomChangetoTumor(), state.getMotilityRatioNormal(), state.getMotilityRatioNormal());
 			}
 		}
 	}
-	
+
 	public Cell(CellState cellState, Double2D position ) { 
 		this.cellState = cellState;
 		this.position = position;
@@ -86,20 +90,38 @@ public class Cell implements Steppable{
 
 	
 
-	protected void ChangeStateNormtoxicCellState(){
-		this.setCellState(new NormtoxicCellState());
+	protected void ChangeStateNormtoxicCellState(Environment state, Double2D position){
+		 double proliferationRate = this.proliferationRate(state, position);
+		 
+		 int nNormtoxic = state.getnNormtoxicCells();
+		 state.setnNormtoxicCells(nNormtoxic++);
+		 
+		this.setCellState(new NormtoxicCellState(state.getOxygenConsumtionNormotoxic(), state.getGluConsumtionNormotoxic(), state.getRandomchangetoNecrotic(), state.getMotilityRatioNormotoxic(), state.getProliferationRatioNormotoxic(), state.getTermozolimide()));
 	}
 	
-	protected void ChangeStateNecroticState(){
+	protected void ChangeStateNecroticState(Environment state){
+		 int nNecrotic = state.getnNecroticCells();
+		 state.setnNormtoxicCells(nNecrotic++);
+		 
 		this.setCellState(new NecroticCellState());
 	}
 	
-	protected void ChangeStateHypoglycemicState( ){
-		this.setCellState(new HypoglycemicCellState());
+	protected void ChangeStateHypoglycemicState(Environment state, Double2D position){
+		 double proliferationRate = this.proliferationRate(state, position);
+		 
+		 int nHypoglicemic = state.getnHypoglicemicCells();
+		 state.setnNormtoxicCells(nHypoglicemic++);
+		 
+		this.setCellState(new HypoglycemicCellState(state.getOxygenConsumtionNormotoxic(), state.getGluConsumtionNormotoxic(), state.getRandomchangetoNecrotic(), state.getMotilityRatioNormotoxic(), state.getProliferationRatioNormotoxic(), state.getTermozolimide()));
 	}
 	
-	protected void ChangeStateHypoxicState( ){
-		this.setCellState(new HypoxicCellState());
+	protected void ChangeStateHypoxicState(Environment state, Double2D position){
+		 double proliferationRate = this.proliferationRate(state, position);
+		 
+		 int nHypoxic = state.getnHypoxicCells();
+		 state.setnNormtoxicCells(nHypoxic++);
+		 
+		this.setCellState(new HypoxicCellState(state.getOxygenConsumtionNormotoxic(), state.getGluConsumtionNormotoxic(), state.getRandomchangetoNecrotic(), state.getMotilityRatioNormotoxic(), state.getProliferationRatioNormotoxic(), state.getTermozolimide()));
 	}
 	
 	
@@ -122,6 +144,13 @@ public class Cell implements Steppable{
 
 	public int getRadium(){
 		return this.radium;
+	}
+	
+	
+	
+	protected double proliferationRate(Environment status, Double2D position){
+		double proliferationRate = status.concentration(position, Oxygen.class) * status.concentration(position, Glucose.class) * status.getProliferationConstant() * (1-status.getT());
+		return proliferationRate;
 	}
 }
 

@@ -25,18 +25,18 @@ public class Molecule implements Steppable{
 		
 		Double2D movePosition = eState.newPosition(position);
 		
-		//Environment eState = (Environment)state;
+		//Valid movement (not outside the grid)
 		if(movePosition.x < 0) movePosition.add(new Double2D(2, 0));
 		if(movePosition.x >= eState.getGridWidth()) movePosition.subtract(new Double2D(2,0));
 		if(movePosition.y  < 0) movePosition.add(new Double2D(0, 2));
 		if(movePosition.y >= eState.getGridHeigh()) movePosition.subtract(new Double2D(0,2));
 
-		if(!this.findObstacle(movePosition, eState)){
+		//if(!this.findObstacle(movePosition, eState)){
 			this.position = movePosition;
 			eState.environment.setObjectLocation(this, movePosition);	
-		}else{
-			this.position = movePosition.multiply(20);
-		}
+		//}else{
+		//	this.position =  new Double2D (this.position.x - 2*(movePosition.x), this.position.y - 2*(movePosition.y));
+		//}
 	}
 	
 	protected boolean findObstacle(Double2D newPosition,  Environment state){

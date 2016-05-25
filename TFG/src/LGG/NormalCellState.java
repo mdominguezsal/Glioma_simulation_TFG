@@ -3,61 +3,78 @@ package LGG;
 import java.awt.Color;
 
 import sim.engine.SimState;
+import sim.util.Double2D;
 
 public class NormalCellState extends CellState{
-	private final static int MIN_OXYGEN = 1;
-	private final static int MIN_GLUCOSE = 1;
-	private final static float APOPTOSIS = 1;
-	private final static int MOTILITY_RATIO = 1;
-	private final static int PROLIFERATION_RATIO = 1;
+	//private final static Double oxygen ;
+//	private final static Double glucose ;
+//	private final static Double apoptosis;
+	
+	private int dc;
 	private Metabolism metabolism;
 	private Motility motility;
 	private Proliferation proliferation;
+	private double changetoTumor;
 	private int radium = 10;
 	
-	public NormalCellState() {
-		metabolism = new Metabolism(MIN_OXYGEN, MIN_GLUCOSE,APOPTOSIS, radium);
-		motility = new Motility(MOTILITY_RATIO);
-		proliferation = new Proliferation(PROLIFERATION_RATIO);
+	public NormalCellState(double oxygen, double glucose, double apoptosis, double changetoTumor, double motilityRate, double proliferationRate) {
+		metabolism = new Metabolism(oxygen, glucose, apoptosis, this.radium);
+		motility = new Motility(motilityRate);
+		proliferation = new Proliferation(proliferationRate);
+		this.changetoTumor = changetoTumor;
 		color = Color.GREEN;
 	}
 
+
+
+	/*protected double proliferationRate(Environment e, Double2D p) {
+		// TODO Auto-generated method stub
+		return 0;
+	}*/
+
+
+
+
+
+
 	@Override
 	public void executeState(Environment state, Cell cell) {
-		Double randomD = state.random.nextDouble() * 200;
-		int randomI = randomD.intValue();
-		
-		Boolean suffOxygen = this.metabolism.sufficientOxygen(state, cell.getPosition());
-		Boolean suffGlucose = this.metabolism.sufficientGlucose(state, cell.getPosition());
+		Double randomTumor = state.random.nextDouble();
+		boolean suffOxygen = this.metabolism.sufficientGlucose(state, cell);
+		boolean suffGlucose = this.metabolism.sufficientGlucose(state, cell);
 
-
-		if(randomI == 1){
-			cell.ChangeStateNormtoxicCellState();	
+		if(randomTumor < state.getRandomChangetoTumor()){	cell.ChangeStateNormtoxicCellState(state, cell.getPosition());	
 		}else{
-			this.motility.Move(cell, state);
-			if(randomI >= 195){
-				
-				if( !suffOxygen || suffGlucose)	cell.ChangeStateNecroticState();
-				//Double randomApoptosis = state.random.nextDouble() * 200;
-				//int randomApoptosisI = randomApoptosis.intValue();
+			Double randomApoptosis = state.random.nextDouble();
+			if(randomApoptosis < state.getRandomchangetoNecrotic()){ 
+				cell.ChangeStateNecroticState(state);
+			}else{
+				if( !suffOxygen && suffGlucose){
+					cell.ChangeStateNecroticState(state);
+				}else{
+
+					if(!suffOxygen) cell.ChangeStateHypoxicState(state, cell.getPosition()); 
+					if(!suffGlucose)cell.ChangeStateHypoglycemicState(state, cell.getPosition());
+
+					Double proliferation = state.random.nextDouble();
+					if(proliferation < this.proliferation.proliferationRate){
+
+					}else{
+						Double randomMotility = (double) motility.ratio;
+						if(randomMotility < state.getMotilityRatioNormal()) this.motility.Move(cell, state);
+
+					}
+				}
 			}
-			if(randomI == 2) cell.ChangeStateNecroticState();
-			if(randomI == 3) this.motility.Move(cell, state);
-		if(randomI == 10) this.proliferation.proliferate(cell, state);
-				//if(randomI < 10 && randomI > 1 ){
-				
-				//}else{
-				//	if(randomI < 20 && randomI > 10 ){
-				//	this.proliferation.proliferate(cell, state);
-				//}
-			}
-			//}
-			//}
-		//}
+		}	
+	}
+	
+	/*public int proliferative(Environment state){
+		return (int) (this.dc * (1-state.getT()));
 	}
 	
 	
 	public void necroticCellsAround(Environment state){
 		
-	}
+	}*/
 }

@@ -7,10 +7,10 @@ import sim.util.Bag;
 import sim.util.Double2D;
 
 public class Motility implements Behaviour{
-	int ratio;
+	Double ratio;
 
-	public Motility(int motilityRatio) {
-		this.ratio = motilityRatio;
+	public Motility(Double motility) {
+		this.ratio = motility;
 	}
 
 	public void Move(Cell cell,Environment eState){
