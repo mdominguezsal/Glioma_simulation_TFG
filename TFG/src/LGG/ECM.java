@@ -3,13 +3,10 @@ package LGG;
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.engine.Stoppable;
-import sim.util.Bag;
 import sim.util.Double2D;
 
 public class ECM implements Steppable{
-
-	//private int creation_GLU_ratio = 2;
-	//private int creation_O_ratio = 2;
+	private static final long serialVersionUID = 1L;
 
 	public ECM(Environment status) {
 
@@ -17,8 +14,6 @@ public class ECM implements Steppable{
 
 	public void step(SimState simstate) {
 		Environment state = (Environment) simstate;
-		// System.out.print("new molecule2:");
-		// System.out.println();
 		 
 		// Añadir control de cuantas se crean
 		 Double2D newOPosition= state.positionNewMolecule();//state.getPositionNewMolecule();
@@ -35,11 +30,5 @@ public class ECM implements Steppable{
 		 state.schedule.scheduleRepeating(glu);
 		 Stoppable stopGlu = state.schedule.scheduleRepeating(glu);
 		 glu.setStop(stopGlu);
-		 
-		 /*state.countObjectsInEnvirontment(termozolomide)
-		 
-		 Bag b = state.environment.getAllObjects();
-		 b.iterator()
-		 int i = state.getTermozolimide();*/
 	}
 }

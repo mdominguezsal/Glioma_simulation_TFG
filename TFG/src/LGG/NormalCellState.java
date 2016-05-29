@@ -2,79 +2,59 @@ package LGG;
 
 import java.awt.Color;
 
-import sim.engine.SimState;
-import sim.util.Double2D;
-
 public class NormalCellState extends CellState{
-	//private final static Double oxygen ;
-//	private final static Double glucose ;
-//	private final static Double apoptosis;
-	
-	private int dc;
-	private Metabolism metabolism;
+	private static final long serialVersionUID = 1L;
 	private Motility motility;
 	private Proliferation proliferation;
-	private double changetoTumor;
 	private int radium = 10;
 	
-	public NormalCellState(double oxygen, double glucose, double apoptosis, double changetoTumor, double motilityRate, double proliferationRate) {
-		metabolism = new Metabolism(oxygen, glucose, apoptosis, this.radium);
-		motility = new Motility(motilityRate);
-		proliferation = new Proliferation(proliferationRate);
-		this.changetoTumor = changetoTumor;
+	public NormalCellState(Environment state){
+		metabolism = new Metabolism(state.getOxygenConsumtionNormal(), state.getGluConsumtionNormal(), state.getApoptosisValue(), this.radium);
+		motility = new Motility(state.getMotilityRatioNormal());
+		proliferation = new Proliferation(state.getProliferationRatioNormal());
 		color = Color.GREEN;
 	}
-
-
-
-	/*protected double proliferationRate(Environment e, Double2D p) {
-		// TODO Auto-generated method stub
-		return 0;
-	}*/
-
-
-
-
-
-
+	
 	@Override
 	public void executeState(Environment state, Cell cell) {
-		Double randomTumor = state.random.nextDouble();
-		boolean suffOxygen = this.metabolism.sufficientGlucose(state, cell);
-		boolean suffGlucose = this.metabolism.sufficientGlucose(state, cell);
-
-		if(randomTumor < state.getRandomChangetoTumor()){	cell.ChangeStateNormtoxicCellState(state, cell.getPosition());	
-		}else{
-			Double randomApoptosis = state.random.nextDouble();
-			if(randomApoptosis < state.getRandomchangetoNecrotic()){ 
-				cell.ChangeStateNecroticState(state);
-			}else{
-				if( !suffOxygen && suffGlucose){
-					cell.ChangeStateNecroticState(state);
-				}else{
-
-					if(!suffOxygen) cell.ChangeStateHypoxicState(state, cell.getPosition()); 
-					if(!suffGlucose)cell.ChangeStateHypoglycemicState(state, cell.getPosition());
-
-					Double proliferation = state.random.nextDouble();
-					if(proliferation < this.proliferation.proliferationRate){
-
-					}else{
-						Double randomMotility = (double) motility.ratio;
-						if(randomMotility < state.getMotilityRatioNormal()) this.motility.Move(cell, state);
-
-					}
-				}
-			}
-		}	
-	}
-	
-	/*public int proliferative(Environment state){
-		return (int) (this.dc * (1-state.getT()));
-	}
-	
-	
-	public void necroticCellsAround(Environment state){
+		this.metabolism.incrementConsumptionNeeds();
+		boolean needOxygen = this.metabolism.needOxygen();
+		boolean suffOxygen = false;
+		boolean needGlucose = this.metabolism.needGlucose();
+		boolean suffGlucose = false;
+		if (needOxygen){
+			suffOxygen = this.metabolism.consumeOxygen(state, cell);
+		}
+		if (needGlucose){
+			suffGlucose = this.metabolism.consumeGlucose(state, cell);			
+		}
 		
-	}*/
+		if (state.random.nextDouble() < (this.findTumorArround(state, cell) * state.getChangeToTumorbyContact())){
+			cell.ChangeStateNormtoxicCellState(state, cell.getPosition());
+		}else if (state.random.nextDouble() < (this.findNecroticArround(state, cell) * state.getChangetoNecroticbyContact())){
+			cell.ChangeStateNecroticState(state, CauseOfDeath.ByContact);
+		}else if(state.random.nextDouble() < state.getApoptosisValue()){ 
+			cell.ChangeStateNecroticState(state, CauseOfDeath.Apoptosis);
+		}else if(state.random.nextDouble() < state.getRandomChangetoTumor()){
+			cell.ChangeStateNormtoxicCellState(state, cell.getPosition());	
+		}else if((needOxygen && !suffOxygen) || (needGlucose && !suffGlucose)){
+			cell.ChangeStateNecroticState(state, CauseOfDeath.InsufficientNutrients);
+		}else if(state.random.nextDouble() < this.proliferation.proliferationRate){
+			this.proliferation.proliferate(cell, state);
+		}else if(state.random.nextDouble() < motility.ratio){
+			this.motility.Move(cell, state);
+		}
+	}
+	
+	@Override
+	public void incrementTypeOfCell(Environment state) {
+		int newValue = state.getNumberOfNormalCells() + 1;
+		state.numberOfNormalChangeValue(newValue);
+	}
+
+	@Override
+	public void decrementTypeOfCell(Environment state) {
+		int newValue = state.getNumberOfNormalCells() - 1;
+		state.numberOfNormalChangeValue(newValue);
+	}
 }

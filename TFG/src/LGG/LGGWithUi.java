@@ -3,7 +3,6 @@ package LGG;
 import sim.display.*;
 import sim.portrayal.DrawInfo2D;
 import sim.portrayal.continuous.ContinuousPortrayal2D;
-import sim.portrayal.grid.*;
 
 import java.awt.*;
 
@@ -17,8 +16,6 @@ import sim.engine.SimState;
 public class LGGWithUi extends GUIState {
 	public Display2D display;
 	public JFrame displayFrame;
-	//SparseGridPortrayal2D cellPortrayal = new SparseGridPortrayal2D();
-	//SparseGridPortrayal2D nutrientsPortrayal = new SparseGridPortrayal2D();
 	ContinuousPortrayal2D portrayal = new ContinuousPortrayal2D();
 
 	
@@ -32,7 +29,14 @@ public class LGGWithUi extends GUIState {
 	public LGGWithUi() {
 		super(new Environment(System.currentTimeMillis()));
 	}
-
+	
+	public LGGWithUi(SimState state) {
+		super(state);
+	}
+	
+	public static String getName(){
+		return "LGG";
+	}
 
 	public void quit(){
 		super.quit();
@@ -67,23 +71,13 @@ public class LGGWithUi extends GUIState {
 		portrayal.setPortrayalForClass(Glucose.class, new OvalPortrayal2D(Color.WHITE));
 		portrayal.setPortrayalForClass(Termozolomide.class,  new OvalPortrayal2D(Color.RED));
 
-		//cellPortrayal.setField(se.environtment);
-		
-		//OvalPortrayal2D o = new OvalPortrayal2D(Color.red);
-		//cellPortrayal.setPortrayalForAll(o);
-		
-		
-		//nutrientsPortrayal.setField(se.environtment);
-		//OvalPortrayal2D p = new OvalPortrayal2D(Color.blue);
-		//nutrientsPortrayal.setPortrayalForAll(p);
-		
 		display.reset();
 		display.repaint();
 	}
 
 	public void init(Controller c){
 		super.init(c);
-		display = new Display2D(1000,1000,this);
+		display = new Display2D(800,800,this);
 		displayFrame = display.createFrame();
 		c.registerFrame(displayFrame);
 		displayFrame.setVisible(true);

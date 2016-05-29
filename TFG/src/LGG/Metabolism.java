@@ -1,103 +1,83 @@
 package LGG;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 import sim.util.Bag;
-import sim.util.Double2D;
 import sim.engine.SimState;
 
-public class Metabolism implements Behaviour{
-	Double min_Oxygen;
-	Double min_Glucose;
-	Double apoptosis;
+public class Metabolism implements Serializable{
+	private static final long serialVersionUID = 1L;
+	double oxygenIntake;
+	double glucoseIntake;
+	double apoptosis;
 	int distance;
-	int count = 0;
+	double oxygenConsumptionNeeds = 0.0;
+	double glucoseConsumptionNeeds = 0.0;
 
-	public Metabolism(Double oxygen, Double glucose, Double apoptosis, int distance) {
-		this.min_Oxygen = oxygen;
-		this.min_Glucose = glucose;
+	public Metabolism(double oxygen, double glucose, double apoptosis, int distance) {
+		this.oxygenIntake = oxygen;
+		this.glucoseIntake = glucose;
 		this.apoptosis = apoptosis;
 		this.distance = distance;
 	}
-
-	/*public void metabolismExecution(SimState state, Cell cell){
-		//System.out.print(this.sufficientGlucose(state, cell.getPosition()));
-		
-		if(!this.sufficientGlucose(state, cell.getPosition())){
-		//if(cell.getCellState().getClass() == NormtoxicCellState.class) 	cell.ChangeStateHypoglycemicState();
-
-			if(cell.getCellState().getClass() == NormalCellState.class)	cell.ChangeStateNecroticState();
-			/*if(cell.getCellState().getClass() == HypoglycemicCellState.class){
-				Double randomD = state.random.nextDouble() * 200;
-				int randomI = randomD.intValue();
-				if(count > randomI)  cell.getCellState().ChangeStateNecroticState(cell);
-				count = count++;
-		}
-		if(!this.sufficientOxygen(state, cell.getPosition())){
-			if(cell.getCellState().getClass() == NormalCellState.class)	cell.ChangeStateNecroticState();
-			
-			/*if(cell.getCellState().getClass() == NormtoxicCellState.class) 	cell.getCellState().ChangeStateHypoglycemicState(cell);
-
-			if(cell.getCellState().getClass() == NormtoxicCellState.class) 	cell.getCellState().ChangeStateHypoxicState(cell);
-
-			if(cell.getCellState().getClass() == HypoglycemicCellState.class) cell.getCellState().ChangeStateNecroticState(cell);
-
-			//cell.getCellState().ChangeStateHypoxicState(cell);
-
-			/*if(cell.getCellState().getClass() == HypoxicCellState.class){
-				Double randomD = state.random.nextDouble() * 200;
-				int randomI = randomD.intValue();
-				if(count > randomI)  cell.getCellState().ChangeStateNecroticState(cell);
-				count = count++;
-			}
-		}	
-	}*/
 	
-	public boolean sufficientOxygen(SimState state, Cell cell){
+	public boolean consumeOxygen(SimState state, Cell cell){
 		Environment t = (Environment)state;
-		int i = 0;
-		Boolean sufficientOxygen = false;
-		
+			
 		Bag agentsList = t.environment.getNeighborsWithinDistance(cell.getPosition(), distance);
-		//System.out.println("Cell in position "+position+ " Checking distance "+distance);
 		Iterator<Object> it = agentsList.iterator();
 		
-		while (it.hasNext() && !sufficientOxygen){
+		while (it.hasNext() && oxygenConsumptionNeeds >= 1){
 			Object obj = it.next();
 			if (obj.getClass() == Oxygen.class){
 				Oxygen o = (Oxygen)obj;
-				//System.out.println("Oxygen in position "+o.position);
 				t.environment.remove(o);
 				o.removeMolecule();
-				i++;
-				if(i == this.min_Oxygen) sufficientOxygen = true;
+				oxygenConsumptionNeeds = oxygenConsumptionNeeds - 1;
 			}
 		}
-		return sufficientOxygen;	
+		
+		return oxygenConsumptionNeeds < 1;	
 	}
 	
-	public boolean sufficientGlucose(SimState state, Cell cell){
+	public boolean consumeGlucose(SimState state, Cell cell){
 		Environment t = (Environment)state;
-		int i = 0;
-		Boolean sufficientGlu = false;
-		
+				
 		Bag agentsList = t.environment.getNeighborsWithinDistance(cell.getPosition(), distance);
-		//System.out.println("Cell in position "+position+ " Checking distance "+distance);
 		Iterator<Object> it = agentsList.iterator();
 
-		while (it.hasNext() && !sufficientGlu){
+		while (it.hasNext() && glucoseConsumptionNeeds >= 1){
 			Object obj = it.next();
 			if (obj.getClass() == Glucose.class){
 				Glucose glu = (Glucose)obj;
-				//System.out.println("Glucose in position "+ glu.position);
 				t.environment.remove(glu);
 				glu.removeMolecule();
-				i++;
-				if(i == this.min_Glucose) sufficientGlu = true;
+				glucoseConsumptionNeeds = glucoseConsumptionNeeds - 1;
 			}	
 		}
-		return sufficientGlu;
+		
+		return glucoseConsumptionNeeds < 1;
 	}
-
-
+	
+	public void incrementConsumptionNeeds(){
+		oxygenConsumptionNeeds += oxygenIntake;
+		glucoseConsumptionNeeds += glucoseIntake;
+	}
+	
+	public boolean needOxygen(){
+		return oxygenConsumptionNeeds >= 1.0;
+	}
+	
+	public boolean needGlucose(){
+		return glucoseConsumptionNeeds >= 1.0;
+	}
+	
+	public double getOxygenNeeds(){
+		return oxygenConsumptionNeeds;
+	}
+	
+	public double getGlucoseNeeds(){
+		return glucoseConsumptionNeeds;
+	}
 }

@@ -1,58 +1,63 @@
 package LGG;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-
 import sim.field.continuous.Continuous2D;
-import sim.field.grid.SparseGrid2D;
 import sim.util.Bag;
 import sim.util.Double2D;
 import sim.engine.SimState;
 import sim.engine.Stoppable;
 
 public class Environment extends SimState {
-	 public Continuous2D environment;
+	private static final long serialVersionUID = 1L;
+
+	public Continuous2D environment;
+
+	 // initial params
 	 private Double radium = (double) 4;
 	 private int gridWidth = 300;  //the width of the grid
 	 private int gridHeight = 300; //the height of the grid
 	 private int nInitCells = 50; //The number of particles
-	 private int nNecroticCells = 0;
-	 private int nNormtoxicCells = 0;
+	 private int nInitMolecules = 10000;
+	 private int nTermozolomide = 150;	 
+	 
+	 // counting params
+	 
+	 private int nCells = 0;
+	 private int nNormalCells = 0;
+	 private int nNormotoxicCells = 0;
 	 private int nHypoxicCells = 0;
-	 private int nHypoglicemicCells = 0;
-	 private int nInitMolecules = 1000;
-	 private int nO;
-	 private int nGlu;
-	 private double nTermozolomide = 50;
-	 private int maxConcentrationCell = 300;
-	 private int maxConcentrationMolecules = 10000;
-	 private int proliferationConstant = 1;
-	 private int conversionToNecrotic = 1;
+	 private int nHypoglycemicCells = 0;
+	 private int nNecroticCells = 0;
+	 private int nDeathBytermozolomide = 0;
+
+	 // behavior params
 	 
-	 //////
+	 private int effectiveTermozolomide = 10;
 	 
-	 private double motilityRatioHypoxic;
-	 private double motilityRatioHypoglucemic;
-	 private double motilityRatioNormal;
-	 private double motilityRatioNormotoxic;
+	 private double motilityRatioHypoxic = 0.2;
+	 private double motilityRatioHypoglucemic = 0.3;
+	 private double motilityRatioNormal = 0.1;
+	 private double motilityRatioNormotoxic = 0.5;
 	 
-	 private double proliferationRatioHypoxic;
-	 private double proliferationRatioHypoglicemic;
-	 private double proliferationRatioNormal;
-	 private double proliferationRatioNormotoxic;
+	 private double proliferationRatioHypoxic = 0.2;
+	 private double proliferationRatioHypoglicemic = 0.3;
+	 private double proliferationRatioNormal = 0;
+	 private double proliferationRatioNormotoxic = 0.5;
 	 
-	 private double randomchangetoNecrotic;
-	 private double changetoNecroticbyContact;
-	 private double randomChangetoTumor;
+	 private double apoptosisValue = 0.00001;
+	 private double changeToTumorRandom = 0.001;
+ 	 private double changeToNecroticbyContact = 0.001;
+	 private double changeToTumorbyContact = 0.001;
 	 
-	 private double oxygenConsumtionNormal;
-	 private double oxygenConsumtionNormotoxic;
-	 private double oxygenConsumtionHipoglycemic;
+	 private double oxygenConsumtionNormal = 0.04;
+	 private double oxygenConsumtionNormotoxic = 0.08;
+	 private double oxygenConsumtionHipoglycemic = 0.005;
+	 private double oxygenConsumtionHypoxic = 0.005;
 	 
-	 private double gluConsumtionNormal;
-	 private double gluConsumtionNormotoxic;
-	 private double gluConsumtionHipoglycemic;
+	 private double gluConsumtionNormal = 0.02;
+	 private double gluConsumtionNormotoxic = 0.04;
+	 private double gluConsumtionHipoglycemic = 0.005;
+	 private double gluConsumtionHypoxic = 0.2;
 	 
 	 
  	 public Environment(long seed) {
@@ -61,13 +66,21 @@ public class Environment extends SimState {
 
 	 public void start(){
 		 super.start();
-		environment = new Continuous2D(1.0,gridWidth,gridHeight);
+		 nCells = 0;
+		 nNormalCells = 0;
+		 nNormotoxicCells = 0;
+		 nHypoxicCells = 0;
+		 nHypoglycemicCells = 0;
+		 nNecroticCells = 0;
+		 nDeathBytermozolomide = 0;
+		 
+		 environment = new Continuous2D(1.0,gridWidth,gridHeight);
 
 		 for(int i=0;i < nInitCells;i++){
 			 Cell cell = new Cell(this);
 			 environment.setObjectLocation(cell, cell.getPosition());
 			 schedule.scheduleRepeating(cell);
-			 //Stoppable stopCell = schedule.schedulerepeating(cell);
+			 nCells = nCells +1;
 		 }
 
 		 for(int i=0;i < nInitMolecules;i++){
@@ -93,16 +106,12 @@ public class Environment extends SimState {
 		 
 		 ECM ecm = new ECM(this);
 		 schedule.scheduleRepeating(ecm);
-		 //cellSpace.setObjectLocation(cell, cell.x, cell.y);
-		 //cells.add(cell);
-		 //oxygenSpace.setObjectLocation(oxygen, oxygen.x, oxygen.y);
 	 }
 	 
 	 
 	 public boolean cellInPosition(Double2D position, int hash, int radium){
 		 Bag b = this.environment.getNeighborsExactlyWithinDistance(position, radium);
 			if(b == null) return false;
-			//System.out.print("\n");
 			Iterator i = b.iterator();
 			while(i.hasNext()){
 				Object obj = i.next();
@@ -143,7 +152,7 @@ public class Environment extends SimState {
 	 public Double2D newPosition(Double2D position){
 		 Double2D movePosition = null;
 		 Double move = this.random.nextDouble() * 8;
-			int i = move.intValue();
+		 int i = move.intValue();
 		
 			if (i == 0){
 				movePosition = new Double2D(position.x+1, position.y);
@@ -169,7 +178,7 @@ public class Environment extends SimState {
 	 public Double2D newCellPositionInit(){
 		 Double x = this.random.nextDouble();
 		 Double y = this.random.nextDouble();
-		 return new Double2D((x * this.gridWidth/6 + this.gridWidth/6),(y * this.gridHeight)/6 + (this.gridHeight/6)); 
+		 return new Double2D((x * this.gridWidth/6 + this.gridWidth/3),(y * this.gridHeight)/6 + (this.gridHeight/3)); 
 	 }
 
 	 public Double2D positionMolecule(){
@@ -180,13 +189,12 @@ public class Environment extends SimState {
 	 public Double2D positionTermozolomide(){
 		 Double x = this.random.nextDouble();
 		 Double y = this.random.nextDouble();
-		 return new Double2D((x * this.gridWidth/8 + this.gridWidth/8),(y * this.gridHeight)/8 + (this.gridHeight/8)); 
+		 return new Double2D((x * this.gridWidth/6 + this.gridWidth/3),(y * this.gridHeight)/6 + (this.gridHeight/3)); 
 	 }
 	 
 
 	 public Double2D positionNewMolecule(){	
 		 Double2D newPosition = null;
-		 // Boolean randomxy = this.random.nextBoolean(); 
 		 Double xy = this.random.nextDouble()* this.getGridWidth();
 
 		 Double randomxy = this.random.nextDouble() * 4;
@@ -203,28 +211,34 @@ public class Environment extends SimState {
 			 newPosition = new Double2D(this.gridWidth-2, xy);
 		 }
 
-		 // System.out.print("new molecule:");
-		 //System.out.print(newPosition);
-		 //System.out.println();
 		 return newPosition;
 
 	 }
+	 
+	 public void setGridWidth(int width){
+		 this.gridWidth = width;
+	 }
+	 
 	 public int getGridWidth(){
 		 return this.gridWidth;
 	 }
 
-	 public int getGridHeigh(){
+	 public int getGridHeight(){
 		 return this.gridHeight;
 	 }
+	 
+	 public void setGridHeight(int height){
+		 this.gridHeight = height;
+	 }
 
-	 public int getNCells(){
+	 public int getInitialCells(){
 		 return this.nInitCells;
 	 }
 
-	 public void setNCells(int ncells){
-		 this.nInitCells = nInitCells; 
+	 public void setInitialCells(int ncells){
+		 this.nInitCells = ncells; 
 	 }
-
+	 
 	 public int getNMolecules(){
 		 return this.nInitMolecules;
 	 }
@@ -233,26 +247,11 @@ public class Environment extends SimState {
 		 this.nInitMolecules = nMolecules;	 
 	 }
 
-	 public double getTermozolimide(){
+	 public double getTermozolomide(){
 		 return this.nTermozolomide;
 	 }
-	 public void setTermozolomide(double t){
+	 public void setTermozolomide(int t){
 		 this.nTermozolomide = t;	 
-	 }
-
-	 public int getconversionToNecrotic(){
-		 return this.conversionToNecrotic;
-	 }
-	 public void setconversionToNecrotic(int t){
-		 this.conversionToNecrotic = t;
-	 }
-
-	 public void setProliferationConstant(int constant){
-		 this.proliferationConstant = constant;
-	 }
-
-	 public int getProliferationConstant(){
-		 return this.proliferationConstant;
 	 }
 	 
  	 public int countObjectsInEnvirontment(Object object){
@@ -266,85 +265,15 @@ public class Environment extends SimState {
 		 
 		 return n;
 	 }
-
- 	 private double nutrientCoefficient(int concentration){
- 		 int nh = 0;
- 		 if(concentration <= 0) nh = 1;	 
- 		 double d = 1 - (this.bhAndbq((double)concentration)+this.conversionToNecrotic) * nh; 	
- 		 return d;
- 	 }
- 	 
-
-
- 	 private double bhAndbq(double concentration){ 
- 		 double d = (1 - (double)concentration/this.nInitMolecules)/20;
- 		 return d;
- 	 }
-
-
- 	 public int concentration(Double2D position, Class c){
- 		 Bag b = this.environment.getNeighborsWithinDistance(position, this.radium);
- 		 Iterator it = b.iterator();
- 		 int concentration = 0;
-
- 		 while (it.hasNext()){
- 			 Object tmp = it.next();
- 			 if(tmp.getClass() == c){
- 				 concentration++;
- 			 }
- 		 }
- 		 return concentration;
- 	 }
-
- 	 private void addCellToCounting(int i){
- 		 this.nInitCells = this.nInitCells++;
- 	 }
- 	 
- 	 public Double getT(){
- 		 return  (double) (this.nInitCells/this.maxConcentrationCell);
- 	 }
-
-	public int getnNormtoxicCells() {
-		return nNormtoxicCells;
+ 
+	public int getEffectiveTermozolomide(){
+		return effectiveTermozolomide;
 	}
-
-	public void setnNormtoxicCells(int nNormtoxicCells) {
-		this.nNormtoxicCells = nNormtoxicCells;
+	
+	public void setEffectiveTermozolomide(int effectiveTermozolomide){
+		this.effectiveTermozolomide = effectiveTermozolomide;
 	}
-
-	public int getnNecroticCells() {
-		return nNecroticCells;
-	}
-
-	public void setnNecroticCells(int nNecroticCells) {
-		this.nNecroticCells = nNecroticCells;
-	}
-
-	public int getnHypoxicCells() {
-		return nHypoxicCells;
-	}
-
-	public void setnHypoxicCells(int nHypoxicCells) {
-		this.nHypoxicCells = nHypoxicCells;
-	}
-
-	public int getnHypoglicemicCells() {
-		return nHypoglicemicCells;
-	}
-
-	public void setnHypoglicemicCells(int nHypoglicemicCells) {
-		this.nHypoglicemicCells = nHypoglicemicCells;
-	}
-
-	public int getGlq() {	
-	return (int) this.nutrientCoefficient(this.nGlu);
-	}
-
-
-	public int getNh() {
-		return (int)this.nutrientCoefficient(this.nO);
-	}
-
+	
 	public double getMotilityRatioHypoxic() {
 		return motilityRatioHypoxic;
 	}
@@ -353,11 +282,11 @@ public class Environment extends SimState {
 		this.motilityRatioHypoxic = motilityRatioHypoxic;
 	}
 
-	public double getMotilityRatioHypoglucemic() {
+	public double getMotilityRatioHypoglycemic() {
 		return motilityRatioHypoglucemic;
 	}
 
-	public void setMotilityRatioHypoglucemic(double motilityRatioHypoglucemic) {
+	public void setMotilityRatioHypoglycemic(double motilityRatioHypoglucemic) {
 		this.motilityRatioHypoglucemic = motilityRatioHypoglucemic;
 	}
 
@@ -385,12 +314,11 @@ public class Environment extends SimState {
 		this.proliferationRatioHypoxic = proliferationRatioHypoxic;
 	}
 
-	public double getProliferationRatioHypoglicemic() {
+	public double getProliferationRatioHypoglycemic() {
 		return proliferationRatioHypoglicemic;
 	}
 
-	public void setProliferationRatioHypoglicemic(
-			double proliferationRatioHypoglicemic) {
+	public void setProliferationRatioHypoglycemic(double proliferationRatioHypoglicemic) {
 		this.proliferationRatioHypoglicemic = proliferationRatioHypoglicemic;
 	}
 
@@ -410,28 +338,28 @@ public class Environment extends SimState {
 		this.proliferationRatioNormotoxic = proliferationRatioNormotoxic;
 	}
 
-	public double getRandomchangetoNecrotic() {
-		return randomchangetoNecrotic;
+	public double getApoptosisValue() {
+		return apoptosisValue;
 	}
 
-	public void setRandomchangetoNecrotic(double randomchangetoNecrotic) {
-		this.randomchangetoNecrotic = randomchangetoNecrotic;
+	public void setApoptosisValue(double randomchangetoNecrotic) {
+		this.apoptosisValue = randomchangetoNecrotic;
 	}
 
 	public double getChangetoNecroticbyContact() {
-		return changetoNecroticbyContact;
+		return changeToNecroticbyContact;
 	}
 
 	public void setChangetoNecroticbyContact(double changetoNecroticbyContact) {
-		this.changetoNecroticbyContact = changetoNecroticbyContact;
+		this.changeToNecroticbyContact = changetoNecroticbyContact;
 	}
 
 	public double getRandomChangetoTumor() {
-		return randomChangetoTumor;
+		return changeToTumorRandom;
 	}
 
 	public void setRandomChangetoTumor(double randomChangetoTumor) {
-		this.randomChangetoTumor = randomChangetoTumor;
+		this.changeToTumorRandom = randomChangetoTumor;
 	}
 
 	public double getOxygenConsumtionNormal() {
@@ -453,6 +381,14 @@ public class Environment extends SimState {
 	public double getOxygenConsumtionHipoglycemic() {
 		return oxygenConsumtionHipoglycemic;
 	}
+	
+	public double getOxygenConsumtionHypoxic(){
+		return oxygenConsumtionHypoxic;
+	}
+	
+	public void setOxygenConsumtionHypoxic(double oxygenConsumtionHypoxic){
+		this.oxygenConsumtionHypoxic = oxygenConsumtionHypoxic;
+	}
 
 	public void setOxygenConsumtionHipoglycemic(double oxygenConsumtionHipoglycemic) {
 		this.oxygenConsumtionHipoglycemic = oxygenConsumtionHipoglycemic;
@@ -465,7 +401,7 @@ public class Environment extends SimState {
 	public void setGluConsumtionNormal(double gluConsumtionNormal) {
 		this.gluConsumtionNormal = gluConsumtionNormal;
 	}
-
+	
 	public double getGluConsumtionNormotoxic() {
 		return gluConsumtionNormotoxic;
 	}
@@ -478,10 +414,81 @@ public class Environment extends SimState {
 		return gluConsumtionHipoglycemic;
 	}
 
+	public void setGluConsumtionHypoxic(double gluConsumtionHypoxic) {
+		this.gluConsumtionHypoxic = gluConsumtionHypoxic;
+	}
+	
+	public double getGluConsumtionHypoxic() {
+		return gluConsumtionHypoxic;
+	}
+
 	public void setGluConsumtionHipoglycemic(double gluConsumtionHipoglycemic) {
 		this.gluConsumtionHipoglycemic = gluConsumtionHipoglycemic;
 	}
 
+	public double getChangeToTumorbyContact() {
+		return changeToTumorbyContact;
+	}
+
+	public void setChangeToTumorbyContact(double changeToTumorbyContact) {
+		this.changeToTumorbyContact = changeToTumorbyContact;
+	}
+
+	public int getNCells(){
+		return nCells;
+	}
+	
+	public void numberOfCellsChangeValue(int numCells){
+		nCells = numCells;
+	}
+	
+	public int getNumberOfNormalCells(){
+		return nNormalCells;
+	}
+	
+	public void numberOfNormalChangeValue(int numCells){
+		nNormalCells = numCells;
+	}
+	 
+	public int getNumberOfNormotoxicCells(){
+		return nNormotoxicCells;
+	}
+	
+	public void numberOfNormotoxicChangeValue(int numCells){
+		nNormotoxicCells = numCells;
+	}
+	
+	public int getNumberOfHypoxicCells(){
+		return nHypoxicCells;
+	}
+	
+	public void numberOfHypoxicChangeValue(int numCells){
+		nHypoxicCells = numCells;
+	}
+		
+	public int getNumberOfHypoglycemicCells(){
+		return nHypoglycemicCells;
+	}
+	
+	public void numberOfHypoglycemicChangeValue(int numCells){
+		nHypoglycemicCells = numCells;
+	}
+		
+	public int getNumberOfNecroticCells(){
+		return nNecroticCells;
+	}
+	
+	public void numberOfNecroticChangeValue(int numCells){
+		nNecroticCells = numCells;
+	}
+	
+	public int getNumberOfNecroticByTermozolomideCells(){
+		return nDeathBytermozolomide;
+	}
+	
+	public void numberOfDeathByTermozolomideChangeValue(int numCells){
+		nDeathBytermozolomide = numCells;
+	}
 }
 
 

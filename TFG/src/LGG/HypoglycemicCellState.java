@@ -2,97 +2,57 @@ package LGG;
 
 import java.awt.Color;
 
-import sim.engine.SimState;
-
 public class HypoglycemicCellState extends TumorCellState{
-	
-	//private int dc;
-	/*private Metabolism metabolism;
-	private Motility motility;
-	private Proliferation proliferation;
-	private int radium = 10;
-	private Double termozolomide;*/
-	
-	/*private int dq;
-	private int toNecroticO;
-	private int toNecroticGlu;
-	private int radium = 10;
-	private Metabolism metabolism;
-	private Motility motility;
-	private Proliferation proliferation;*/
+	private static final long serialVersionUID = 1L;
 
-
-	
-	
-	public HypoglycemicCellState(Double oxygen, Double glucose, Double apoptosis, Double motilityRate, Double proliferationRate, Double termozolomide) {
-		metabolism = new Metabolism(oxygen, glucose, apoptosis, this.radium);
-		motility = new Motility(motilityRate);
-		proliferation = new Proliferation(proliferationRate);
-		this.termozolomide = termozolomide;
+	public HypoglycemicCellState(Environment state){
+		metabolism = new Metabolism(state.getOxygenConsumtionHipoglycemic(), state.getGluConsumtionHipoglycemic(), state.getApoptosisValue(), this.radium);
+		motility = new Motility(state.getMotilityRatioHypoglycemic());
+		proliferation = new Proliferation(state.getProliferationRatioHypoglycemic());
+		termozolomide = state.getEffectiveTermozolomide();
 		color = Color.MAGENTA;
 	}
-
 	
 	@Override
 	public void executeState(Environment state, Cell cell) {
-
-		boolean suffOxygen = this.metabolism.sufficientGlucose(state, cell);
-		boolean suffGlucose = this.metabolism.sufficientGlucose(state, cell);
-
-		Double randomApoptosis = state.random.nextDouble();
-
-		if(randomApoptosis < state.getRandomchangetoNecrotic()){ 
-			cell.ChangeStateNecroticState(state);
-		}else{
-			if( !suffOxygen && suffGlucose){
-				//cell.ChangeStateNecroticState(state);
-			}else{
-				if(!suffOxygen) cell.ChangeStateNecroticState(state); 
-				if(suffGlucose)cell.ChangeStateNormtoxicCellState(state, cell.getPosition());
-
-				if(this.findTermozolomide(state, cell)> this.termozolomide){
-					cell.ChangeStateNecroticState(state);
-				}else{
-					Double proliferation = state.random.nextDouble();
-					if(proliferation < this.proliferation.proliferationRate){
-						this.proliferation.proliferate(cell, state);
-
-					}else{
-						Double randomMotility = (double) motility.ratio;
-						if(randomMotility < state.getMotilityRatioNormal()){
-							this.motility.Move(cell, state);
-						}
-
-					}
-				}
-			}
-		}	
+		this.metabolism.incrementConsumptionNeeds();
+		boolean needOxygen = this.metabolism.needOxygen();
+		boolean suffOxygen = false;
+		boolean needGlucose = this.metabolism.needGlucose();
+		boolean suffGlucose = false;
+		if (needOxygen){
+			suffOxygen = this.metabolism.consumeOxygen(state, cell);
+		}
+		if (needGlucose){
+			suffGlucose = this.metabolism.consumeGlucose(state, cell);			
+		}
+		
+		if (state.random.nextDouble() < (this.findNecroticArround(state, cell) * state.getChangetoNecroticbyContact())){
+			cell.ChangeStateNecroticState(state, CauseOfDeath.ByContact);
+		}else if(this.findTermozolomide(state, cell)  > this.termozolomide){
+			cell.ChangeStateNecroticState(state, CauseOfDeath.Termozolomide);
+		}else if(state.random.nextDouble() < state.getApoptosisValue()){ 
+			cell.ChangeStateNecroticState(state, CauseOfDeath.Apoptosis);
+		}else if(needGlucose && suffGlucose){
+			cell.ChangeStateNormtoxicCellState(state, cell.getPosition());				
+		}else if ((needOxygen && !suffOxygen) || (needGlucose && !suffGlucose)){ 
+			cell.ChangeStateNecroticState(state, CauseOfDeath.InsufficientNutrients);	
+		}else if(state.random.nextDouble() < this.proliferation.proliferationRate){
+			this.proliferation.proliferate(cell, state);
+		}else if(state.random.nextDouble() < state.getMotilityRatioNormal()){
+			this.motility.Move(cell, state);
+		}
 	}
 
-	
-	/*
-	public int proliferative(Environment state){
-		return (int) (this.dq * (1-state.getT()));
+	@Override
+	public void incrementTypeOfCell(Environment state) {
+		int newValue = state.getNumberOfHypoglycemicCells() + 1;
+		state.numberOfHypoglycemicChangeValue(newValue);
 	}
 
-	public int toNecroticConversionRate(Environment state){
-		return this.toNecroticO *  this.setToNecroticO(state) + this.toNecroticGlu * this.setToNecroticGlu(state);
+	@Override
+	public void decrementTypeOfCell(Environment state) {
+		int newValue = state.getNumberOfHypoglycemicCells() - 1;
+		state.numberOfHypoglycemicChangeValue(newValue);
 	}
-
-
-	private int setToNecroticO(Environment state){//Nqn
-		int toNecrotic = 0;
-		if(state.getNh() == 1 && state.getGlq() == 1)toNecrotic = 1;
-		return toNecrotic;		
-	}
-
-	private int setToNecroticGlu(Environment state){ // Glqn
-		int toNecrotic = 0;
-		Double i = (double) state.getnHypoglicemicCells()/ (state.getnNormtoxicCells()+state.getnHypoglicemicCells()+state.getnHypoxicCells());
-
-		if(i>0.9) toNecrotic = 1;
-
-		return toNecrotic;
-	}
-*/
 }

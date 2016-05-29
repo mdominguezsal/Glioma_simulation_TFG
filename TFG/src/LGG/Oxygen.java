@@ -1,14 +1,12 @@
 package LGG;
 
-import sim.engine.SimState;
 import sim.util.Double2D;
 
 public class Oxygen extends Molecule{
-	//private static final long serialVersionUID = 1L;
-	//Environment e;
 	
+	private static final long serialVersionUID = 1L;
+
 	public Oxygen(Double2D position) {
 		this.position = position;		
 	}
-
 }
