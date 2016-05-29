@@ -6,7 +6,7 @@ public class HypoxicCellState extends TumorCellState{
 	private static final long serialVersionUID = 1L;
 
 	public HypoxicCellState(Environment state){
-		metabolism = new Metabolism(state.getOxygenConsumtionHypoxic(), state.getGluConsumtionHypoxic(), state.getApoptosisValue(), this.radium);
+		metabolism = new Metabolism(state.getOxygenConsumptionHypoxic(), state.getGluConsumptionHypoxic(), state.getApoptosisValue(), this.radium);
 		motility = new Motility(state.getMotilityRatioHypoxic());
 		proliferation = new Proliferation(state.getProliferationRatioHypoxic());
 		termozolomide = state.getEffectiveTermozolomide();

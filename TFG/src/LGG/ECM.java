@@ -14,16 +14,14 @@ public class ECM implements Steppable{
 
 	public void step(SimState simstate) {
 		Environment state = (Environment) simstate;
-		 
-		// Añadir control de cuantas se crean
-		 Double2D newOPosition= state.positionNewMolecule();//state.getPositionNewMolecule();
+
+		 Double2D newOPosition= state.positionNewMolecule();
 		 Oxygen o = new Oxygen(newOPosition);
 		 state.environment.setObjectLocation(o, newOPosition);
 		 state.schedule.scheduleRepeating(o);
 		 Stoppable stopOx = state.schedule.scheduleRepeating(o);
 		 o.setStop(stopOx);
 
-		 // Añadir control de cuantas se crean
 		 Double2D newGluPosition= state.positionNewMolecule();
 		 Glucose glu = new Glucose(newGluPosition);
 		 state.environment.setObjectLocation(glu, newGluPosition);

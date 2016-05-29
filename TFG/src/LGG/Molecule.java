@@ -19,8 +19,7 @@ public class Molecule implements Steppable{
 		}
 		
 		Double2D movePosition = eState.newPosition(position);
-		
-		//Valid movement (not outside the grid)
+
 		if(movePosition.x < 0) movePosition.add(new Double2D(2, 0));
 		if(movePosition.x >= eState.getGridWidth()) movePosition.subtract(new Double2D(2,0));
 		if(movePosition.y  < 0) movePosition.add(new Double2D(0, 2));

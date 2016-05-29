@@ -49,15 +49,15 @@ public class Environment extends SimState {
  	 private double changeToNecroticbyContact = 0.001;
 	 private double changeToTumorbyContact = 0.001;
 	 
-	 private double oxygenConsumtionNormal = 0.04;
-	 private double oxygenConsumtionNormotoxic = 0.08;
-	 private double oxygenConsumtionHipoglycemic = 0.005;
-	 private double oxygenConsumtionHypoxic = 0.005;
+	 private double oxygenConsumptionNormal = 0.04;
+	 private double oxygenConsumptionNormotoxic = 0.08;
+	 private double oxygenConsumptionHypoglycemic = 0.005;
+	 private double oxygenConsumptionHypoxic = 0.005;
 	 
-	 private double gluConsumtionNormal = 0.02;
-	 private double gluConsumtionNormotoxic = 0.04;
-	 private double gluConsumtionHipoglycemic = 0.005;
-	 private double gluConsumtionHypoxic = 0.2;
+	 private double gluConsumptionNormal = 0.02;
+	 private double gluConsumptionNormotoxic = 0.04;
+	 private double gluConsumptionHypoglycemic = 0.005;
+	 private double gluConsumptionHypoxic = 0.2;
 	 
 	 
  	 public Environment(long seed) {
@@ -362,68 +362,68 @@ public class Environment extends SimState {
 		this.changeToTumorRandom = randomChangetoTumor;
 	}
 
-	public double getOxygenConsumtionNormal() {
-		return oxygenConsumtionNormal;
+	public double getOxygenConsumptionNormal() {
+		return oxygenConsumptionNormal;
 	}
 
-	public void setOxygenConsumtionNormal(double oxygenConsumtionNormal) {
-		this.oxygenConsumtionNormal = oxygenConsumtionNormal;
+	public void setOxygenConsumptionNormal(double oxygenConsumptionNormal) {
+		this.oxygenConsumptionNormal = oxygenConsumptionNormal;
 	}
 
-	public double getOxygenConsumtionNormotoxic() {
-		return oxygenConsumtionNormotoxic;
+	public double getOxygenConsumptionNormotoxic() {
+		return oxygenConsumptionNormotoxic;
 	}
 
-	public void setOxygenConsumtionNormotoxic(double oxygenConsumtionNormotoxic) {
-		this.oxygenConsumtionNormotoxic = oxygenConsumtionNormotoxic;
+	public void setOxygenConsumptionNormotoxic(double oxygenConsumptionNormotoxic) {
+		this.oxygenConsumptionNormotoxic = oxygenConsumptionNormotoxic;
 	}
 
-	public double getOxygenConsumtionHipoglycemic() {
-		return oxygenConsumtionHipoglycemic;
+	public double getOxygenConsumptionHypoglycemic() {
+		return oxygenConsumptionHypoglycemic;
 	}
 	
-	public double getOxygenConsumtionHypoxic(){
-		return oxygenConsumtionHypoxic;
+	public double getOxygenConsumptionHypoxic(){
+		return oxygenConsumptionHypoxic;
 	}
 	
-	public void setOxygenConsumtionHypoxic(double oxygenConsumtionHypoxic){
-		this.oxygenConsumtionHypoxic = oxygenConsumtionHypoxic;
+	public void setOxygenConsumptionHypoxic(double oxygenConsumptionHypoxic){
+		this.oxygenConsumptionHypoxic = oxygenConsumptionHypoxic;
 	}
 
-	public void setOxygenConsumtionHipoglycemic(double oxygenConsumtionHipoglycemic) {
-		this.oxygenConsumtionHipoglycemic = oxygenConsumtionHipoglycemic;
+	public void setOxygenConsumptionhypoglycemic(double oxygenConsumptionhypoglycemic) {
+		this.oxygenConsumptionHypoglycemic = oxygenConsumptionhypoglycemic;
 	}
 
-	public double getGluConsumtionNormal() {
-		return gluConsumtionNormal;
+	public double getGluConsumptionNormal() {
+		return gluConsumptionNormal;
 	}
 
-	public void setGluConsumtionNormal(double gluConsumtionNormal) {
-		this.gluConsumtionNormal = gluConsumtionNormal;
+	public void setGluConsumptionNormal(double gluConsumptionNormal) {
+		this.gluConsumptionNormal = gluConsumptionNormal;
 	}
 	
-	public double getGluConsumtionNormotoxic() {
-		return gluConsumtionNormotoxic;
+	public double getGluConsumptionNormotoxic() {
+		return gluConsumptionNormotoxic;
 	}
 
-	public void setGluConsumtionNormotoxic(double gluConsumtionNormotoxic) {
-		this.gluConsumtionNormotoxic = gluConsumtionNormotoxic;
+	public void setGluConsumptionNormotoxic(double gluConsumptionNormotoxic) {
+		this.gluConsumptionNormotoxic = gluConsumptionNormotoxic;
 	}
 
-	public double getGluConsumtionHipoglycemic() {
-		return gluConsumtionHipoglycemic;
+	public double getGluConsumptionhypoglycemic() {
+		return gluConsumptionHypoglycemic;
 	}
 
-	public void setGluConsumtionHypoxic(double gluConsumtionHypoxic) {
-		this.gluConsumtionHypoxic = gluConsumtionHypoxic;
+	public void setGluconsumptionHypoxic(double gluConsumptionHypoxic) {
+		this.gluConsumptionHypoxic = gluConsumptionHypoxic;
 	}
 	
-	public double getGluConsumtionHypoxic() {
-		return gluConsumtionHypoxic;
+	public double getGluConsumptionHypoxic() {
+		return gluConsumptionHypoxic;
 	}
 
-	public void setGluConsumtionHipoglycemic(double gluConsumtionHipoglycemic) {
-		this.gluConsumtionHipoglycemic = gluConsumtionHipoglycemic;
+	public void setGluConsumptionHypoglycemic(double gluConsumptionHypoglycemic) {
+		this.gluConsumptionHypoglycemic = gluConsumptionHypoglycemic;
 	}
 
 	public double getChangeToTumorbyContact() {

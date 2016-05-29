@@ -9,7 +9,7 @@ public class NormalCellState extends CellState{
 	private int radium = 10;
 	
 	public NormalCellState(Environment state){
-		metabolism = new Metabolism(state.getOxygenConsumtionNormal(), state.getGluConsumtionNormal(), state.getApoptosisValue(), this.radium);
+		metabolism = new Metabolism(state.getOxygenConsumptionNormal(), state.getGluConsumptionNormal(), state.getApoptosisValue(), this.radium);
 		motility = new Motility(state.getMotilityRatioNormal());
 		proliferation = new Proliferation(state.getProliferationRatioNormal());
 		color = Color.GREEN;
