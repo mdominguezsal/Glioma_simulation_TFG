@@ -9,7 +9,7 @@ public class HypoxicCellState extends TumorCellState{
 		metabolism = new Metabolism(state.getOxygenConsumptionHypoxic(), state.getGluConsumptionHypoxic(), state.getApoptosisValue(), this.radium);
 		motility = new Motility(state.getMotilityRatioHypoxic());
 		proliferation = new Proliferation(state.getProliferationRatioHypoxic());
-		termozolomide = state.getEffectiveTermozolomide();
+		termozolomide = state.valueOfEffectiveTermozolomide();
 		color = Color.BLUE;
 	}
 		

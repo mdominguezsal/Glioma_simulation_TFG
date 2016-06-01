@@ -16,7 +16,7 @@ public abstract class TumorCellState extends CellState{
 		Environment t = (Environment)state;
 		int i = 0;
 		
-		Bag agentsList = t.environment.getNeighborsWithinDistance(cell.getPosition(), cell.getRadium());
+		Bag agentsList = t.environment.getNeighborsWithinDistance(cell.getPosition(), cell.getRadium()+ 2);
 		Iterator<Object> it = agentsList.iterator();
 		
 		while (it.hasNext()){

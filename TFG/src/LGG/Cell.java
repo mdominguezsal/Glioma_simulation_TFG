@@ -34,13 +34,11 @@ public class Cell implements Steppable{
 	}
 
 	public Cell(CellState cellState, Double2D position ) { 
+		reasonDeath = CauseOfDeath.Alive;
 		this.cellState = cellState;
 		this.position = position;
 	}
 	
-	public Cell(Double2D p) {
-		this.position = p;
-	}
 
 	@Override
 	public void step(SimState state) {

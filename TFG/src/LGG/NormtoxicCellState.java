@@ -9,7 +9,7 @@ public class NormtoxicCellState extends TumorCellState{
 		metabolism = new Metabolism(state.getOxygenConsumptionNormotoxic(), state.getGluConsumptionNormotoxic(), state.getApoptosisValue(), this.radium);
 		motility = new Motility(state.getMotilityRatioNormotoxic());
 		proliferation = new Proliferation(state.getProliferationRatioNormotoxic());
-		termozolomide = state.getEffectiveTermozolomide();
+		termozolomide = state.valueOfEffectiveTermozolomide();
 		color = Color.RED;
 	}
 	

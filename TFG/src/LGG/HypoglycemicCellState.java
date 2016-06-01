@@ -9,7 +9,7 @@ public class HypoglycemicCellState extends TumorCellState{
 		metabolism = new Metabolism(state.getOxygenConsumptionHypoglycemic(), state.getGluConsumptionhypoglycemic(), state.getApoptosisValue(), this.radium);
 		motility = new Motility(state.getMotilityRatioHypoglycemic());
 		proliferation = new Proliferation(state.getProliferationRatioHypoglycemic());
-		termozolomide = state.getEffectiveTermozolomide();
+		termozolomide = state.valueOfEffectiveTermozolomide();
 		color = Color.MAGENTA;
 	}
 	

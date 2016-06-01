@@ -21,9 +21,9 @@ public class Molecule implements Steppable{
 		Double2D movePosition = eState.newPosition(position);
 
 		if(movePosition.x < 0) movePosition.add(new Double2D(2, 0));
-		if(movePosition.x >= eState.getGridWidth()) movePosition.subtract(new Double2D(2,0));
+		if(movePosition.x >= (double)eState.valueGridWidth()) movePosition.subtract(new Double2D(2,0));
 		if(movePosition.y  < 0) movePosition.add(new Double2D(0, 2));
-		if(movePosition.y >= eState.getGridHeight()) movePosition.subtract(new Double2D(0,2));
+		if(movePosition.y >= (double)eState.valueGridHeight()) movePosition.subtract(new Double2D(0,2));
 
 		this.position = movePosition;
 		eState.environment.setObjectLocation(this, movePosition);	

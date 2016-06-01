@@ -69,7 +69,7 @@ public class LGGWithUi extends GUIState {
 		portrayal.setPortrayalForClass(Cell.class, cellPortrayal);
 		portrayal.setPortrayalForClass(Oxygen.class, new OvalPortrayal2D(Color.CYAN));
 		portrayal.setPortrayalForClass(Glucose.class, new OvalPortrayal2D(Color.WHITE));
-		portrayal.setPortrayalForClass(Termozolomide.class,  new OvalPortrayal2D(Color.RED));
+		portrayal.setPortrayalForClass(Termozolomide.class,  new OvalPortrayal2D(Color.yellow ,2));
 
 		display.reset();
 		display.repaint();
